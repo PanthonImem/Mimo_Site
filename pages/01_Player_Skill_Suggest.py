@@ -65,13 +65,14 @@ def find_top_skills(pdf):
 def main():
     st.set_page_config(layout="centered")
     st.title("Mimo Skill Suggest")
-    st.write('Powered by Mimo Skill Fit Score')
+    st.write('Powered by :orange[Mimo Skill Fit Score]')
     if 'df' not in st.session_state:
         st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
     adf = st.session_state['df']
     adf['Player ID'] = adf['Player ID'].astype(str)
 
-    st.write('Player ID is a number unique to each player in the game. You can obtain the player ID of each card from the URL of any Database website such as PESDB or EFHub.')
+    st.write('Player ID is a number unique to each player in the game. You can obtain the player ID of each card from the URL of any Database website such as \
+    [PESDB](https://pesdb.net/pes2022/) or [EFHub](https://efootballhub.net/efootball23).')
     pid = st.text_input("Enter Player ID:")
     if pid:
         pdf = adf[adf['Player ID']==pid]

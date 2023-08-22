@@ -44,7 +44,7 @@ def main():
         st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
     adf = st.session_state['df']
 
-    st.write("Mimo Value Index is a made-up index for determining usefulness of a POTW player.")
+    st.write("Mimo Value Index is a made-up index for determining value of a POTW player.")
 
     st.write("Overall Rating, How much of an upgrade from base, Super-sub, and Form are taken into account")
 
