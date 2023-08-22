@@ -71,7 +71,7 @@ def main():
     mmean = gdf['mimo_value_index'].mean().round(2)
     mstd = gdf['mimo_value_index'].std().round(2)
     
-    pack = st.selectbox('Position Filter', potw_packs[::-1], index = 0)
+    pack = st.selectbox('POTW Pack Filter', potw_packs[::-1], index = 0)
     df = pdf[pdf.pack == pack][['pack','Player Name','max_ovr_rating','max_position','Playstyle','Form','mimo_value_index']]\
     .sort_values('mimo_value_index', ascending = False).reset_index(drop = True)
 
