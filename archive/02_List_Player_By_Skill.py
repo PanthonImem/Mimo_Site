@@ -56,25 +56,16 @@ def main():
         st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
     adf = st.session_state['df']
     adf['Player ID'] = adf['Player ID'].astype(str)
-    st.write('Powered by Mimo Skill Fit Score')
+    st.write('Powered by Mimo Skill Score')
+    skill = st.selectbox('Select Skill You Have',sset)
+    skill_weight = st.select_slider('Skill Weight (w)', [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], value = 0.2)
 
-    skills = st.multiselect(
-    'Select Skill(s) You Have.',
-    sset, ['Double Touch', 'Sole Control'], max_selections = 5)
+    adf['skill_addition_score_'+skill] = skill_weight*adf['pred_'+skill]+(1-skill_weight)*adf['max_ovr_rating']
 
-    skill_weight = st.select_slider('Weight between Skill Fit Score and Overall Rating for Sorting', 
-    [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], value = 0.2, help = '0 = entirely by Overall Rating, 1 = entirely by Skill Fit Score')
-
-    adf['skill_score_avg'] = 0
-    adf['no_skill'] = True
-    for skill in skills:
-         adf['skill_score_avg'] += adf['pred_'+skill]/len(skills)
-         adf['no_skill'] = adf['no_skill'] & ~adf['s_'+skill]
-    adf['final_score'] = np.round(skill_weight*adf['skill_score_avg']+(1-skill_weight)*adf['max_ovr_rating'].clip(40,99),1)
-
-    df = adf[(adf['no_skill']==1)&(adf['Maximum Level']>1)&(adf['final_score']>=10)].sort_values('final_score', ascending = False)\
-[['skill_score_avg', 'Overall Rating','Player Name','pack', 'Position','Playstyle','Player ID']]
-    df = df.reset_index(drop = True).rename({'skill_score_avg':'Mimo Skill Score'}, axis = 1)
+    st.write('The sorting is done by  w * mimo_skilL_score + (1-w) * overall rating')
+    df = adf[(adf['s_'+skill]==0)&(adf['Maximum Level']>1)&(adf['pred_'+skill]>=25)].sort_values('skill_addition_score_'+skill, ascending = False)\
+[['pred_'+skill, 'Overall Rating','Player Name','pack', 'Position','Playstyle','Player ID']]
+    df = df.reset_index(drop = True).rename({'pred_'+skill:'Mimo Skill Score: {}'.format(skill)}, axis = 1)
     st.dataframe(df[:120])
 
 

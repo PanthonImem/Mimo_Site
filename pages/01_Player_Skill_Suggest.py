@@ -64,8 +64,7 @@ def find_top_skills(pdf):
 
 def main():
     st.title("Mimo Skill Suggest")
-
-    st.write('Powered by Mimo Skill Score')
+    st.write('Powered by Mimo Skill Fit Score')
     if 'df' not in st.session_state:
         st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
     adf = st.session_state['df']

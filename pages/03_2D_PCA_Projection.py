@@ -22,15 +22,22 @@ def main():
     adf['color'] = [cdict[i] if i in ps else cdict['Unactivated'] for i in adf['Playstyle'].values]
 
     ovr = st.select_slider('Overall Filter', [92,93,94,95,96,97,98], value = 98)
-    pos = st.selectbox('Position Filter', ['All']+list((adf['Position'].unique())))
-    pack = st.selectbox('Highlight Pack', ['All']+list((adf['pack'].unique()))[::-1])
+
+    sc1, sc2 = st.columns((1,2))
+    with sc1:
+        pos = st.selectbox('Position Filter', ['All']+list((adf['Position'].unique())))
+    with sc2:
+        pack = st.selectbox('Highlight Pack', ['All']+list((adf['pack'].unique()))[::-1])
     #x_axis = st.selectbox('X axis', ['pca1','pca2','pca3'])
     #y_axis = st.selectbox('y axis', ['pca2','pca1','pca3'])
 
     x_axis = 'pca1'
     y_axis = 'pca2'
-    show_strongest = st.checkbox('Show Only Highest Ovr Version of each Player')
-    show_pack = st.checkbox('Show Pack in Label')
+    with sc1:
+        show_pack = st.checkbox('Show Pack in Label')
+    with sc2:
+        show_strongest = st.checkbox('Show Only Highest Ovr Version of each Player')
+        
     
     ovr_col = 'max_ovr_rating' if pos == 'All' else 'or_'+pos
     fig = plt.figure(figsize = (15,12))
@@ -45,7 +52,7 @@ def main():
         df = df.sort_values(ovr_col, ascending = False).drop_duplicates('Player Name', keep = 'first')
     plt.scatter(df[x_axis], df[y_axis], s = 4, c = df['color'], alpha = 1)
     for i in range(df.shape[0]):
-        extra_txt = '\n '+df['pack'].values[i][1:] if show_pack else ''
+        extra_txt = '\n'+df['pack'].values[i][1:] if show_pack else ''
         if((df['pack'].values[i]==pack)):
             plt.text(df[x_axis].values[i], df[y_axis].values[i], str(df[ovr_col].values[i])+' '+df['Player Name'].values[i]+extra_txt, size = 8, alpha = 1, color = 'darkred', weight='bold')
         else:
