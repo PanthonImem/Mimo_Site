@@ -5,6 +5,7 @@ import pandas as pd
 def main():
     if 'df' not in st.session_state:
         st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
+    adf = st.session_state['df']
     
     st.title("Welcome to the Mimo Site!")
 

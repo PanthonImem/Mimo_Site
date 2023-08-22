@@ -52,7 +52,9 @@ sset = ['Acrobatic Clear',
 
 def main():
     st.title("Mimo Player Search by Skill")
-    adf = st.session_state.df
+    if 'df' not in st.session_state:
+        st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
+    adf = st.session_state['df']
     adf['Player ID'] = adf['Player ID'].astype(str)
     st.write('Powered by Mimo Skill Score')
     skill = st.selectbox('Select Skill You Have',sset)
