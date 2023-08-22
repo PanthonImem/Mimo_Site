@@ -51,6 +51,7 @@ sset = ['Acrobatic Clear',
  'Weighted Pass']
 
 def main():
+    st.set_page_config(layout="wide")
     st.title("Mimo Player Search by Skill")
     if 'df' not in st.session_state:
         st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
@@ -59,7 +60,7 @@ def main():
     st.write('Powered by Mimo Skill Fit Score')
 
     skills = st.multiselect(
-    'Select Skill(s) You Have.',
+    'Select Skill(s) You Have. Only players :red[without any] of the skills you select will be shown',
     sset, ['Double Touch', 'Sole Control'], max_selections = 5)
 
     skill_weight = st.select_slider('Weight between Skill Fit Score and Overall Rating for Sorting', 

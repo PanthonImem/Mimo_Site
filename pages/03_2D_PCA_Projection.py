@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 def main():
-
+    st.set_page_config(layout="wide")
     st.title("Efootball Players in 2D")
     st.write("The plot below is a PCA projection of player stats onto 2D -- closer players are more similar")
     if 'df' not in st.session_state:
@@ -60,6 +60,7 @@ def main():
 
     plt.axis('off')
     st.write(fig)
+    st.write(cdict)
 
     
     

@@ -63,6 +63,7 @@ def find_top_skills(pdf):
 
 
 def main():
+    st.set_page_config(layout="centered")
     st.title("Mimo Skill Suggest")
     st.write('Powered by Mimo Skill Fit Score')
     if 'df' not in st.session_state:
