@@ -97,12 +97,12 @@ def main():
         st.write(df)
 
 
-    
+    #sc1, sc2 = st.columns((1,2))
     st.write('Best POTW Players by Position')
-    with sc1:
-        pos = st.selectbox('Position Filter', list((adf['Position'].unique())))
-    with sc2:
-        activated = st.checkbox('Show Only Players with Activated Playstyle')
+    #with sc1:
+    pos = st.selectbox('Position Filter', list((adf['Position'].unique())))
+    #with sc2:
+    activated = st.checkbox('Show Only Players with Activated Playstyle')
 
     flag_playstyle = True
     if activated:
