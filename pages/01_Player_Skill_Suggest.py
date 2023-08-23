@@ -75,8 +75,10 @@ def main():
     adf['Player ID'] = adf['Player ID'].astype(str)
 
     st.write('Player ID is a number unique to each player in the game. You can obtain the player ID of each card from the URL of any Database website such as \
-    [PESDB](https://pesdb.net/pes2022/) or [EFHub](https://efootballhub.net/efootball23).')
+    [PESDB](https://pesdb.net/pes2022/) or [EFHub](https://efootballhub.net/efootball23) or the Search by Name tool below.')
+
     pid = st.text_input("Enter Player ID:")
+    st.caption("Mimo Skill Fit Score goes between 0 to 100. Higher means the skill fits the player better.")
     if pid:
         pdf = adf[adf['Player ID']==pid]
         if(pdf.shape[0]>0):
@@ -97,8 +99,10 @@ def main():
     st.write('Example Player ID:')
     st.write(adf[adf['Player ID'].isin([str(i) for i in common_picks])][['Player ID', 'Overall Rating','Player Name','pack']].reset_index(drop = True))
 
-            
-    
+    name_part = st.text_input("Player ID Search by Name", help = "Type part of player name to search. Special character like é in Mbappé not handled.")
+    if name_part:
+        st.write(adf[adf['Player Name'].str.contains(name_part)][['Player ID', 'Overall Rating','Player Name','pack']].sort_values('Overall Rating', ascending = False).reset_index(drop = True))
+
 
 if __name__ == "__main__":
     main()

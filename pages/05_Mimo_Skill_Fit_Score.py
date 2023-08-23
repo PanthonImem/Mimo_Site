@@ -8,6 +8,8 @@ def main():
 
     st.write("This page documents the inner working of :orange[Mimo Skill Fit Score].")
 
+    st.write("Simply put, :orange[Mimo Skill Fit Score] is the probability of a player having a score based on stats, position, and playstyle.")
+
     st.subheader("Background:")
     st.write(f""" With the introduction of Skill Training, a big question many players have is **1) "I have this skill, who should I add it to?"** and\
      **2) "I have this player, what skills should I plan to add?"** """)
