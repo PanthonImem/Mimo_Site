@@ -60,7 +60,6 @@ def main():
 
     plt.axis('off')
     st.write(fig)
-    st.write(cdict)
 
     
     

@@ -44,9 +44,11 @@ def main():
         st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
     adf = st.session_state['df']
 
-    st.write("Mimo Value Index is a made-up index for determining value of a POTW player.")
+    st.write('Powered by :violet[Mimo Value Index]')
 
-    st.write("Overall Rating, How much of an upgrade from base, Super-sub, and Form are taken into account")
+    st.write(":violet[Mimo Value Index] is a made-up index for determining value of a POTW player. The calculation will be adjusted as I get more time to work on it.")
+
+    st.write("Currently, Overall Rating, How much of an upgrade from base, Super-sub, and Form are taken into account")
 
     potw_packs = [i for i in adf['pack'].unique() if 'POTW' in i]
 

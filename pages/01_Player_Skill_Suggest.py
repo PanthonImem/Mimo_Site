@@ -61,6 +61,7 @@ def find_top_skills(pdf):
     columns = ['Suggested Skill','Mimo Skill Score'])
     return sdf[sdf['Mimo Skill Score']>=10]
 
+common_picks = [89074400628164, 87964419886766, 87964420017613, 105592039524159, 105592039515849, 105592039537935]
 
 def main():
     st.set_page_config(layout="centered")
@@ -77,18 +78,22 @@ def main():
     if pid:
         pdf = adf[adf['Player ID']==pid]
         if(pdf.shape[0]>0):
-            st.write("{} {} {}".format(pdf['Player Name'].values[0],\
+            st.subheader("{} - {} {}".format(pdf['Player Name'].values[0],\
             pdf['Overall Rating'].values[0],\
             pdf['Position'].values[0]))
-            st.write("Pack: {}".format(pdf['pack'].values[0][1:]))
+            st.write("Pack: {}".format(pdf['pack'].values[0].lstrip(' ')))
             st.write("Playstyle: {}".format(pdf['Playstyle'].values[0]))
             if('POTW' in pdf['pack'].values[0][1:]):
                 st.write('POTW player cannot have skill added.')
+
 
             st.dataframe(find_top_skills(pdf), hide_index  = False)
             
         else:
             st.write('Player {} not found.'.format(pid))
+
+    st.write('Example Player ID:')
+    st.write(adf[adf['Player ID'].isin([str(i) for i in common_picks])][['Player ID', 'Overall Rating','Player Name','pack']].reset_index(drop = True))
 
             
     
