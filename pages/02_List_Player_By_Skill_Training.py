@@ -111,7 +111,7 @@ def main():
      |df['pack'].str.contains('19')|df['pack'].str.contains('20')|df['pack'].str.contains('Highlight')
         df = df[~ind]
 
-    df = df.reset_index(drop = True).rename({'skill_score_avg':'Mimo Skill Score'}, axis = 1)
+    df = df.reset_index(drop = True).rename({'skill_score_avg':'Mimo Skill Fit Score'}, axis = 1)
     df = df.drop('Condition', axis = 1)
     st.dataframe(df[:120])
 

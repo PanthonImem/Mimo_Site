@@ -10,7 +10,7 @@ def main():
 
     st.subheader("Background:")
     st.write(f""" With the introduction of Skill Training, a big question many players have is **1) "I have this skill, who should I add it to?"** and\
-     **2) "I have this player, what skill should I plan to add?"** """)
+     **2) "I have this player, what skills should I plan to add?"** """)
 
     st.subheader("Model Assumption:")
 

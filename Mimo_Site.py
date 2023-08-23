@@ -10,8 +10,8 @@ def main():
     st.write('This is an amateur website for hosting my personal projects on analysis tools/visualization on players data of the videogame Efootball series.')
 
     st.write("Unfortunately this website :red[does not support mobile]. You might be able to use some functions but most will be pretty limited.\
-    This website is currently hosted (for free) on :blue[Streamlit Community Cloud] which is mostly for educational projects and cannot handle any real traffic.\
-    You are lucky to be seeing this page.")
+    This website is currently hosted (for free) on :blue[Streamlit Community Cloud] which is mostly for educational projects and on what is equivalent to a 1/16th\
+     of a laptop which therefore cannot handle any real traffic. You are lucky to be seeing this page.")
     
     st.write('I would like to hereby thank [PESDB](https://pesdb.net/pes2022/) for the data behind this project. While not officially a data sponsor,\
      PESDB set their website up in a way that is very friendly for data enthusiasts to programmatically access their data and made this whole project possible. \
