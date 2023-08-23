@@ -8,13 +8,16 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
 
+@st.cache_data
+def load_data():
+	return pd.read_csv('data/mimo_dataset.csv')
+
 def main():
     st.set_page_config(layout="wide")
     st.title("Efootball Players in 2D")
     st.write("The plot below is a PCA projection of player stats onto 2D -- closer players are more similar")
-    if 'df' not in st.session_state:
-        st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
-    adf = st.session_state['df']
+
+    adf = load_data()
 
     ps = np.sort(adf['Playstyle'].unique())
     colors = sns.color_palette("tab10",25)

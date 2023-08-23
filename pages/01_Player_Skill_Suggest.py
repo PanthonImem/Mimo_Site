@@ -61,15 +61,17 @@ def find_top_skills(pdf):
     columns = ['Suggested Skill','Mimo Skill Score'])
     return sdf[sdf['Mimo Skill Score']>=10]
 
-common_picks = [89074400628164, 87964419886766, 87964420017613, 105592039524159, 105592039515849, 105592039537935]
+common_picks = [89074400628164, 87964419886766, 87964420017613, 105592039524159, 105592039515849, 105592039537935, 105590160400490, 105590160485839]
+
+@st.cache_data
+def load_data():
+	return pd.read_csv('data/mimo_dataset.csv')
 
 def main():
     st.set_page_config(layout="centered")
     st.title("Mimo Skill Suggest")
     st.write('Powered by :orange[Mimo Skill Fit Score]')
-    if 'df' not in st.session_state:
-        st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
-    adf = st.session_state['df']
+    adf = load_data()
     adf['Player ID'] = adf['Player ID'].astype(str)
 
     st.write('Player ID is a number unique to each player in the game. You can obtain the player ID of each card from the URL of any Database website such as \

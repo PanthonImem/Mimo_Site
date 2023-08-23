@@ -37,12 +37,15 @@ def get_unactivated(pos):
             ls.append(key)
     return ls
 
+@st.cache_data
+def load_data():
+	return pd.read_csv('data/mimo_dataset.csv')
+
 def main():
     st.set_page_config(layout="wide")
     st.title("POTW Pack Explorer")
-    if 'df' not in st.session_state:
-        st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
-    adf = st.session_state['df']
+
+    adf = load_data()
 
     st.write('Powered by :violet[Mimo Value Index]')
 

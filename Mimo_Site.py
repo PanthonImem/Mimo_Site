@@ -5,10 +5,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 def main():
-    if 'df' not in st.session_state:
-        st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
-    adf = st.session_state['df']
-    
     st.title("Welcome to the Mimo Site!")
 
     st.write('This is an amateur website for hosting my personal projects on analysis tools/visualization on players data of the videogame Efootball series.')

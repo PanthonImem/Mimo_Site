@@ -66,12 +66,14 @@ nc_packs = [
     " Golden Boys Dec '22",
 ]
 
+@st.cache_data
+def load_data():
+	return pd.read_csv('data/mimo_dataset.csv')
+
 def main():
     st.set_page_config(layout="wide")
     st.title("Mimo Player Search by Skill")
-    if 'df' not in st.session_state:
-        st.session_state['df'] = pd.read_csv('data/mimo_dataset.csv')
-    adf = st.session_state['df']
+    adf = load_data()
     adf['Player ID'] = adf['Player ID'].astype(str)
     st.write('Powered by :orange[Mimo Skill Fit Score]')
 
