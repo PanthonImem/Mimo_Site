@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
+from unidecode import unidecode
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -73,6 +74,7 @@ def main():
     st.write('Powered by :orange[Mimo Skill Fit Score]')
     adf = load_data()
     adf['Player ID'] = adf['Player ID'].astype(str)
+    adf['Player Name_dcd'] = adf.apply(lambda row: unidecode(row['Player Name']), axis = 1)
 
     st.write('Player ID is a number unique to each player in the game. You can obtain the player ID of each card from the URL of any Database website such as \
     [PESDB](https://pesdb.net/pes2022/) or [EFHub](https://efootballhub.net/efootball23) or the Search by Name tool below.')
@@ -101,7 +103,7 @@ def main():
 
     name_part = st.text_input("Player ID Search by Name", help = "Type part of player name to search. Special character like é in Mbappé not handled.")
     if name_part:
-        st.write(adf[adf['Player Name'].str.contains(name_part)][['Player ID', 'Overall Rating','Player Name','pack']].sort_values('Overall Rating', ascending = False).reset_index(drop = True))
+        st.write(adf[adf['Player Name_dcd'].str.contains(name_part)][['Player ID', 'Overall Rating','Player Name','pack']].sort_values('Overall Rating', ascending = False).reset_index(drop = True))
 
 
 if __name__ == "__main__":
