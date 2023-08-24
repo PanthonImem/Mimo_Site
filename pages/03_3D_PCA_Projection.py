@@ -73,7 +73,7 @@ def main():
         
 
     with sc2:
-        ovr = st.select_slider('Overall Filter', [93,94,95,96,97,98], value = 96)
+        ovr = st.select_slider('Overall Filter', [92, 93,94,95,96,97,98], value = 96)
 
     #sc1, sc2 = st.columns((1,5))
     with sc1:
@@ -104,7 +104,7 @@ def main():
     if st.session_state['show_graph']:
         fig = px.scatter_3d(df, x="pca1", y="pca2", z="pca3", hover_data = ['Player Name','pack','Overall Rating','Playstyle','Position'],
                     width=1200, height=800, color = color_by,  
-                    size = 'Overall Rating2', text = 'Player Name' if name_filter=='' else 'pack' if not label_off else None, hover_name = 'pack')
+                    size = 'Overall Rating2', text = 'Player Name' if name_filter=='' else 'pack' if not label_off else None, hover_name = 'pack', title = pos )
         st.plotly_chart(fig)
         
 
