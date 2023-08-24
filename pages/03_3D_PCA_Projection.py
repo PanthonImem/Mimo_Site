@@ -65,7 +65,7 @@ def main():
     with sc1:
         pos = st.selectbox('Position Filter', ['All']+list((adf['Position'].unique())))
     with sc2:
-        color_by = st.selectbox('Color by', ['Playstyle','Position2'], index = 1)
+        color_by = st.selectbox('Color by', ['Playstyle','Position2','Player Name'], index = 1)
         
     with sc1:
         label_off = st.checkbox('Turn Off Text Label')
@@ -73,7 +73,7 @@ def main():
         
 
     with sc2:
-        ovr = st.select_slider('Overall Filter', [92, 93,94,95,96,97,98], value = 96)
+        ovr = st.select_slider('Overall Filter', [92,93,94,95,96,97,98], value = 96)
 
     #sc1, sc2 = st.columns((1,5))
     with sc1:
@@ -85,8 +85,7 @@ def main():
     ovr_col = 'max_ovr_rating' if pos == 'All' else 'or_'+pos
         
     df = adf[(adf[ovr_col]>=ovr)]
-    if name_filter != '':
-        df = df[df['Player Name']==name_filter]
+    
 
     if pos!='All':
         df.loc[df['Playstyle'].isin(get_unactivated(pos)), 'Playstyle'] = 'Inactivated'
@@ -101,11 +100,19 @@ def main():
     click = st.button('Generate Plot', type = 'primary')
     if click:
         st.session_state['show_graph'] = True
+
     if st.session_state['show_graph']:
-        fig = px.scatter_3d(df, x="pca1", y="pca2", z="pca3", hover_data = ['Player Name','pack','Overall Rating','Playstyle','Position'],
-                    width=1200, height=800, color = color_by,  
-                    size = 'Overall Rating2', text = 'Player Name' if name_filter=='' else 'pack' if not label_off else None, hover_name = 'pack', title = pos )
-        st.plotly_chart(fig)
+        if name_filter != '':
+            df = df[df['Player Name']==name_filter]
+            fig = px.scatter_3d(df, x="pca1", y="pca2", z="pca3", hover_data = ['Player Name','pack','Overall Rating','Playstyle','Position'],
+                        width=1200, height=800, color = color_by,  
+                        size = 'Overall Rating2', text = 'pack' if not label_off else None, hover_name = 'Player Name', title = name_filter )
+            st.plotly_chart(fig)
+        else:
+            fig = px.scatter_3d(df, x="pca1", y="pca2", z="pca3", hover_data = ['Player Name','pack','Overall Rating','Playstyle','Position'],
+                        width=1200, height=800, color = color_by,  
+                        size = 'Overall Rating2', text = 'Player Name' if not label_off else None, hover_name = 'pack', title = pos)
+            st.plotly_chart(fig, theme = 'streamlit' if pos == '' else None)
         
 
 

@@ -7,9 +7,9 @@ warnings.filterwarnings('ignore')
 def main():
     st.title("Welcome to the Mimo Site!")
 
-    st.write('This is an amateur website for hosting my personal projects on analysis tools/visualization on players data of the videogame Efootball series.')
+    st.write('This is an amateur website for hosting my personal projects on analysis tools/visualization on players data of the videogame [Efootball](https://en.wikipedia.org/wiki/EFootball) series (also known as PES and Winning 11 previously).')
 
-    st.write("Unfortunately this website :red[does not support mobile]. You might be able to use some functions but most will be pretty limited.\
+    st.write("This website :red[does not] support mobile. Some features maybe unavailable.\
     This website is currently hosted (for free) on :blue[Streamlit Community Cloud] which is mostly for educational projects and on what is equivalent to a 1/16th\
      of a laptop which therefore cannot handle any real traffic. You are lucky to be seeing this page.")
     
