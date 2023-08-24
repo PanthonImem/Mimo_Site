@@ -59,8 +59,8 @@ def find_top_skills(pdf):
     top_score = np.sort(pdf[pred_cols])[0][::-1]
 
     sdf = pd.DataFrame(list(zip([i.lstrip('pred_') for i in np.array(pred_cols)[top_n]],top_score)), \
-    columns = ['Suggested Skill','Mimo Skill Score'])
-    return sdf[sdf['Mimo Skill Score']>=10]
+    columns = ['Suggested Skill','Mimo Skill Fit Score'])
+    return sdf[sdf['Mimo Skill Fit Score']>=10]
 
 common_picks = [89074400628164, 87964419886766, 87964420017613, 105592039524159, 105592039515849, 105592039537935, 105590160400490, 105590160485839]
 
