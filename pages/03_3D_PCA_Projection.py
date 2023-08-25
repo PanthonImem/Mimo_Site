@@ -47,6 +47,14 @@ def get_unactivated(pos):
             ls.append(key)
     return ls
 
+def get_activated(pos):
+    ls = []
+    for key,value in activate_dict.items():
+        if(pos in value):
+            ls.append(key)
+    return set(ls)
+
+
 def main():
 
     if 'show_graph' not in st.session_state:
@@ -63,7 +71,9 @@ def main():
 
     sc1, sc2 = st.columns((1,2))
     with sc1:
-        pos = st.selectbox('Position Filter', ['All']+list((adf['Position'].unique())))
+
+        poss = st.multiselect('Position Filter', list((adf['Position'].unique())), help = 'Multiple Selects are joined with logical Or')
+        #pos = st.selectbox('Position Filter', ['All']+list((adf['Position'].unique())))
     with sc2:
         color_by = st.selectbox('Color by', ['Playstyle','Position2','Player Name'], index = 1)
         
@@ -82,19 +92,23 @@ def main():
         
     #pack = st.selectbox('Highlight Pack', ['']+list((adf['pack'].unique()))[::-1])
     pack = 'None'
-    ovr_col = 'max_ovr_rating' if pos == 'All' else 'or_'+pos
-        
-    df = adf[(adf[ovr_col]>=ovr)]
-    
 
-    if pos!='All':
-        df.loc[df['Playstyle'].isin(get_unactivated(pos)), 'Playstyle'] = 'Inactivated'
-
+    if poss == []:
+        df = adf[(adf['max_ovr_rating']>=ovr)]
+    else:
+        index = False
+        df = adf.copy()
+        activated_ps = set()
+        for pos in poss:
+            index = index | (df['or_'+pos]>=ovr)
+            activated_ps = activated_ps.union(get_activated(pos))
+        df = df[index]
+        df.loc[~df['Playstyle'].isin(activated_ps), 'Playstyle'] = 'Inactivated'
 
     if show_strongest:
-        df = df.sort_values(ovr_col, ascending = False).drop_duplicates('Player Name', keep = 'first')
+        df = df.sort_values('max_ovr_rating', ascending = False).drop_duplicates('Player Name', keep = 'first')
     
-    df['Overall Rating2'] = np.clip(df['Overall Rating']-90, 1, 10)
+    df['Overall Rating2'] = np.clip(df['max_ovr_rating']-90, 1, 10)
 
     st.caption("The plot is hidden by default to save resource. Click the button below to generate the plot.")
     click = st.button('Generate Plot', type = 'primary')
@@ -111,8 +125,8 @@ def main():
         else:
             fig = px.scatter_3d(df, x="pca1", y="pca2", z="pca3", hover_data = ['Player Name','pack','Overall Rating','Playstyle','Position'],
                         width=1200, height=800, color = color_by,  
-                        size = 'Overall Rating2', text = 'Player Name' if not label_off else None, hover_name = 'pack', title = pos)
-            st.plotly_chart(fig, theme = 'streamlit' if pos == '' else None)
+                        size = 'Overall Rating2', text = 'Player Name' if not label_off else None, hover_name = 'pack', title = ','.join(poss))
+            st.plotly_chart(fig, theme = 'streamlit' if poss == ['All'] else None)
         
 
 
