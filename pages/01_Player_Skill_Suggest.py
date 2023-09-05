@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 from unidecode import unidecode
+import pickle
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -57,7 +58,6 @@ def find_top_skills(pdf):
     pred_cols = [i for i in pdf.columns if 'pred_' in i]
     top_n = np.argsort(pdf[pred_cols])[0][::-1]
     top_score = np.sort(pdf[pred_cols])[0][::-1]
-
     sdf = pd.DataFrame(list(zip([i.lstrip('pred_') for i in np.array(pred_cols)[top_n]],top_score)), \
     columns = ['Suggested Skill','Mimo Skill Fit Score'])
     return sdf[sdf['Mimo Skill Fit Score']>=10]
@@ -75,6 +75,8 @@ def main():
     adf = load_data()
     adf['Player ID'] = adf['Player ID'].astype(str)
     adf['Player Name_dcd'] = adf.apply(lambda row: unidecode(row['Player Name'].lower()), axis = 1)
+    with open('data/skill_suggest_dict.pkl', 'rb') as file:
+        sdict = pickle.load(file)
 
     st.write('Player ID is a number unique to each player in the game. You can obtain the player ID of each card from the URL of any Database website such as \
     [PESDB](https://pesdb.net/pes2022/) or [EFHub](https://efootballhub.net/efootball23) or the Search by Name tool below.')
@@ -98,8 +100,24 @@ def main():
             if('POTW' in pdf['pack'].values[0][1:]):
                 st.write('POTW player cannot have skill added.')
 
-
-            st.dataframe(find_top_skills(pdf), hide_index  = False)
+            df = find_top_skills(pdf).reset_index(drop = True)
+            def gen_reason(pdf, skill, sdict):
+                features = sdict[skill].feature_names_in_
+                val = np.multiply(pdf[features], sdict[skill].coef_[0]).reset_index(drop = True)
+                def top_n_keys(input_dict, n = 3):
+                    sorted_items = sorted(input_dict.items(), key=lambda item: item[1], reverse=True)
+                    top_n_items = sorted_items[:n]
+                    top_n_keys = [item[0] for item in top_n_items]
+                    return top_n_keys
+                txt = ''
+                f_dict = {key: value for key, value in val.T.to_dict()[0].items() if value > 4}
+                for item in top_n_keys(f_dict):
+                    txt+= '{} {}, '.format(pdf[item].values[0], item)
+                return txt
+            df['Top Reasons for Suggestion'] = ''
+            for i in range(df.shape[0]):
+                df.loc[i, 'Top Reasons for Suggestion'] = gen_reason(pdf, df['Suggested Skill'].values[i], sdict)
+            st.dataframe(df, hide_index  = False)
             
         else:
             st.write('Player {} not found.'.format(pid))
