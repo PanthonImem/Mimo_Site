@@ -5,3 +5,4 @@ plotly==5.16.1
 seaborn==0.12.2
 streamlit==1.25.0
 Unidecode==1.3.6
+scikit-learn
