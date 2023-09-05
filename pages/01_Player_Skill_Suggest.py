@@ -4,6 +4,7 @@ import numpy as np
 import streamlit as st
 from unidecode import unidecode
 import pickle
+import sklearn
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -110,13 +111,14 @@ def main():
                     top_n_keys = [item[0] for item in top_n_items]
                     return top_n_keys
                 txt = ''
-                f_dict = {key: value for key, value in val.T.to_dict()[0].items() if value > 4}
+                f_dict = {key: value for key, value in val.T.to_dict()[0].items() if value > 5}
                 for item in top_n_keys(f_dict):
                     txt+= '{} {}, '.format(pdf[item].values[0], item)
                 return txt
             df['Top Reasons for Suggestion'] = ''
             for i in range(df.shape[0]):
-                df.loc[i, 'Top Reasons for Suggestion'] = gen_reason(pdf, df['Suggested Skill'].values[i], sdict)
+                txt = gen_reason(pdf, df['Suggested Skill'].values[i], sdict)
+                df.loc[i, 'Top Reasons for Suggestion'] = txt if txt != '' else 'Multiple Stats Combined'
             st.dataframe(df, hide_index  = False)
             
         else:
