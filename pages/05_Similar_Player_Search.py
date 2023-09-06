@@ -94,8 +94,9 @@ def main():
             st.write(adf[adf['Player Name_dcd'].str.contains(name_part)][['Player ID', 'Overall Rating','Player Name','pack']].sort_values('Overall Rating', ascending = False).reset_index(drop = True))
     col1, col2, col3 = st.columns(3)
     pid = col1.text_input("Enter Player ID:")
+
     threshold = col1.select_slider("Select Maximum Stat Distance Threshold", [0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2], 0.7, help = 'Larger value will return more players, but will be less similar')
-    
+
     if pid:
         pdf = adf[adf['Player ID'] == pid].reset_index(drop = True)
         if pdf.shape[0]:
@@ -125,7 +126,7 @@ def main():
                 tempdf = tempdf.sort_values('stat_dist')
                 tempdf = tempdf[tempdf.stat_dist>0]
                 return tempdf
-            
+
             rdf = search_similar(pdf, pos)
 
             rdf['Player ID'] = ["https://efootballhub.net/efootball23/compare2players?player1Id={}&player2Id={}"\
@@ -168,6 +169,7 @@ def main():
             rdf1 = rdf[(rdf['or_'+pos]-pdf['or_'+pos].values[0])>=-1]            
             rdf2 = rdf1[(rdf1.Playstyle == playstyle)&(rdf1.stat_dist<=threshold)]
             showdf = rdf2[0:10]
+
             st.subheader('Good Substitute')
             if(showdf.shape[0]>0):
                 st.write(showdf.reset_index(drop = True).to_html(escape=False), unsafe_allow_html=True)
