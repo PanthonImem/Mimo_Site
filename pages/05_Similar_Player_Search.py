@@ -109,7 +109,9 @@ def main():
             col1, col2, col3 = st.columns(3)
             col1.write('Pack: {}'.format(pdf['pack'].values[0].lstrip()))
             col2.write("Analyze as Position: {}".format(pos))
-            st.caption("Only most similar version of each player is shown.")
+
+            col1.write('Playstyle: {}'.format(pdf['Playstyle'].values[0]))
+            st.caption("Only highest/most similar version of each player is shown.")
             def search_similar(pdf, pos):
                 for col in ability_cols:
                     pdf[col] = pdf[col] * weightdict[pos][col]
