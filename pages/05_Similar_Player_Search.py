@@ -170,7 +170,7 @@ def main():
             rdf2 = rdf1[(rdf1.Playstyle == playstyle)&(rdf1.stat_dist<=threshold)]
             showdf = rdf2[0:10]
 
-            st.subheader('Good Substitute')
+            st.subheader('Good Replacement')
             if(showdf.shape[0]>0):
                 st.write(showdf.reset_index(drop = True).to_html(escape=False), unsafe_allow_html=True)
             else:
