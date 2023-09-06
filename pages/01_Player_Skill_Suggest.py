@@ -90,6 +90,8 @@ def main():
 
     pid = st.text_input("Enter Player ID:")
     st.caption("Mimo Skill Fit Score goes between 0 to 100. Higher means the skill fits the player better.")
+
+    st.caption("Generally, >70 is very nice to add, 30-70 is nice to have but not essential")
     if pid:
         pdf = adf[adf['Player ID']==pid]
         if(pdf.shape[0]>0):
