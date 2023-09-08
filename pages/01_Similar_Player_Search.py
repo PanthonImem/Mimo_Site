@@ -193,7 +193,6 @@ def main():
                 st.write(showdf.reset_index(drop = True).to_html(escape=False), unsafe_allow_html=True)
             else:
                 st.caption('There is no lite version for this player. Try increasing search threshold.')
-
         else:
             st.caption('Player Not Found')
 
