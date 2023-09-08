@@ -31,7 +31,7 @@ sset = ['Acrobatic Clear',
  'Heel Trick',
  'Interception',
  'Knuckle Shot',
- 'Long-Range Shooting',
+ 'Long Range Shooting',
  'Long-Range Curler',
  'Low Lofted Pass',
  'Man Marking',
@@ -63,7 +63,10 @@ def find_top_skills(pdf):
     columns = ['Suggested Skill','Mimo Skill Fit Score'])
     return sdf[sdf['Mimo Skill Fit Score']>=10]
 
-common_picks = [89073326886422, 87962272534030, 87963614711221, 87963883146684, 87962272533963, 87960930356659]
+common_picks = [105622104223528, 105622104287345, 105622104289284, 105622104239200,
+       105622104221751, 105622641153286, 105622641178320, 105622909525058,
+       105628009896720, 105627741365933, 105622909546728, 105622909601807,
+       105622909632289]
 
 @st.cache_data
 def load_data():
