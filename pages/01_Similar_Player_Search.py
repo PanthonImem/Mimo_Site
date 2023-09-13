@@ -95,7 +95,9 @@ def main():
     col1, col2, col3 = st.columns(3)
     pid = col1.text_input("Enter Player ID:")
 
-    threshold = col1.select_slider("Select Maximum Stat Distance Threshold", [0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2], 0.7, help = 'Larger value will return more players, but will be less similar')
+    show_base_only = col1.checkbox('Show Base Player Only')
+    if not show_base_only:
+        threshold = col1.select_slider("Select Maximum Stat Distance Threshold", [0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2], 0.7, help = 'Larger value will return more players, but will be less similar')
 
     if pid:
         pdf = adf[adf['Player ID'] == pid].reset_index(drop = True)
@@ -122,12 +124,15 @@ def main():
                 tempdf['stat_dist'] = np.round(dist[0]/len(ability_cols),2)
                 tempdf = tempdf[tempdf['Possible Positions'].str.contains(pos)]
                 tempdf = tempdf.sort_values('max_ovr_rating', ascending = False)
+                if show_base_only:
+                    tempdf = tempdf[tempdf.pack == 'base']
+
                 tempdf = tempdf.drop_duplicates(['Player Name','Playstyle']).reset_index(drop = True)
                 tempdf = tempdf.sort_values('stat_dist')
                 tempdf = tempdf[tempdf.stat_dist>0]
                 return tempdf
 
-            rdf = search_similar(pdf, pos)
+            rdf = search_similar(pdf, pos)          
 
             rdf['Player ID'] = ["https://efootballhub.net/efootball23/compare2players?player1Id={}&player2Id={}"\
             .format(str(pid),str(i)) for i in rdf['Player ID'].values]
@@ -155,6 +160,9 @@ def main():
             if pdf['Form'].values[0]=='Inconsistent':
                 rdf.loc[(rdf['Form']=='Unwavering'), 'Pros'] += '+Unwavering Form<br>'
                 rdf.loc[(rdf['Form']=='Standard'), 'Pros'] += '+Standard Form<br>'
+
+            if show_base_only:
+                threshold = 10
 
             def make_clickable(link):
                 text = link.split('=')[-1]
