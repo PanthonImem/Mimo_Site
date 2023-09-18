@@ -5,9 +5,12 @@ import streamlit as st
 from unidecode import unidecode
 import pickle
 import sklearn
-
 import warnings
 warnings.filterwarnings('ignore')
+
+common_picks = [88029649833393, 88029649836770, 88029649833414, 105624520229984, 105624520206751, 105624520215799, 105625325514975,
+       105625325547356, 105625325513700, 105625325463961, 105625325510796,
+       105625325514599, 105625325510960, 105625325542316]
 
 sset = ['Acrobatic Clear',
  'Acrobatic Finishing',
@@ -63,11 +66,6 @@ def find_top_skills(pdf):
     columns = ['Suggested Skill','Mimo Skill Fit Score'])
     return sdf[sdf['Mimo Skill Fit Score']>=10]
 
-common_picks = [105622104223528, 105622104287345, 105622104289284, 105622104239200,
-       105622104221751, 105622641153286, 105622641178320, 105622909525058,
-       105628009896720, 105627741365933, 105622909546728, 105622909601807,
-       105622909632289]
-
 @st.cache_data
 def load_data():
 	return pd.read_csv('data/mimo_dataset.csv')
@@ -82,8 +80,9 @@ def main():
     with open('data/skill_suggest_dict.pkl', 'rb') as file:
         sdict = pickle.load(file)
 
-    st.write('Player ID is a number unique to each player in the game. You can obtain the player ID of each card from the URL of any Database website such as \
-    [PESDB](https://pesdb.net/pes2022/) or [EFHub](https://efootballhub.net/efootball23) or the Search by Name tool below.')
+    st.write('Enter Player ID to obtain Skill Suggestion.')
+    st.write("Mimo Skill Fit Score goes between 0 to 100. Higher means the skill fits the player better.")
+    st.write("Generally, >70 is very nice to add, 30-70 is nice to have but not essential")
 
     with st.expander("Player ID Search by Name"):
         name_part = st.text_input("Enter Player Name", help = "Type part of player name to search.")
@@ -91,10 +90,9 @@ def main():
             name_part = name_part.lower()
             st.write(adf[adf['Player Name_dcd'].str.contains(name_part)][['Player ID', 'Overall Rating','Player Name','pack']].sort_values('Overall Rating', ascending = False).reset_index(drop = True))
 
-    pid = st.text_input("Enter Player ID:")
-    st.caption("Mimo Skill Fit Score goes between 0 to 100. Higher means the skill fits the player better.")
-
-    st.caption("Generally, >70 is very nice to add, 30-70 is nice to have but not essential")
+    pid = st.text_input("Enter Player ID:", help = 'Player ID is a number unique to each player in the game.\
+     You can obtain the player ID of each card from the URL of any Database website such as PESDB or EFHub or the Search by Name tool above.')
+    
     if pid:
         pdf = adf[adf['Player ID']==pid]
         if(pdf.shape[0]>0):

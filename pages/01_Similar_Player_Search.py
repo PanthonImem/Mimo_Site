@@ -5,9 +5,12 @@ import streamlit as st
 import pickle
 import ast
 from unidecode import unidecode
-
 import warnings
 warnings.filterwarnings('ignore')
+
+common_picks = [88029649833393, 88029649836770, 88029649833414, 105624520229984, 105624520206751, 105624520215799, 105625325514975,
+       105625325547356, 105625325513700, 105625325463961, 105625325510796,
+       105625325514599, 105625325510960, 105625325542316]
 
 ability_cols = ['Offensive Awareness',
  'Ball Control',
@@ -74,8 +77,12 @@ def load_data():
 	return pd.read_csv('data/mimo_dataset.csv')
 
 def main():
+
+    
+
     st.set_page_config(layout="wide")
     st.title("Similar Player Search")
+    st.write('This tool search for players with similar stats and playstyle. Input their ID or search Player ID by Name below:')
     adf = load_data()
     adf['Player ID'] = adf['Player ID'].astype(str)
     adf['Player Name_dcd'] = adf.apply(lambda row: unidecode(row['Player Name'].lower()), axis = 1)
@@ -93,7 +100,8 @@ def main():
         if name_part:
             st.write(adf[adf['Player Name_dcd'].str.contains(name_part)][['Player ID', 'Overall Rating','Player Name','pack']].sort_values('Overall Rating', ascending = False).reset_index(drop = True))
     col1, col2, col3 = st.columns(3)
-    pid = col1.text_input("Enter Player ID:")
+    pid = col1.text_input("Enter Player ID:", help = 'Player ID is a number unique to each player in the game.\
+     You can obtain the player ID of each card from the URL of any Database website such as PESDB or EFHub or the Search by Name tool above.')
 
     show_base_only = col1.checkbox('Show Base Player Only')
     if not show_base_only:
@@ -170,6 +178,9 @@ def main():
 
             # link is the column with hyperlinks
             playstyle = pdf['Playstyle'].values[0]
+
+            if (playstyle in get_unactivated(pos)):
+                playstyle = 'Inactivated'
             rdf['Player ID'] = rdf['Player ID'].apply(make_clickable)
             rdf.loc[rdf['Playstyle'].isin(get_unactivated(pos)), 'Playstyle'] = 'Inactivated'
 
@@ -203,6 +214,10 @@ def main():
                 st.caption('There is no lite version for this player. Try increasing search threshold.')
         else:
             st.caption('Player Not Found')
+    
+    st.write('Example Player ID:')
+    st.write(adf[adf['Player ID'].isin([str(i) for i in common_picks])][['Player ID', 'Overall Rating','Player Name','pack']].reset_index(drop = True))
+
 
             #st.write(rdf1[rdf1.Playstyle != playstyle][:10].to_html(escape=False), unsafe_allow_html=True)
         
