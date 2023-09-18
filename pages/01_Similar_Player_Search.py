@@ -214,7 +214,8 @@ def main():
                 st.caption('There is no lite version for this player. Try increasing search threshold.')
         else:
             st.caption('Player Not Found')
-    
+            
+    st.divider()
     st.write('Example Player ID:')
     st.write(adf[adf['Player ID'].isin([str(i) for i in common_picks])][['Player ID', 'Overall Rating','Player Name','pack']].reset_index(drop = True))
 
