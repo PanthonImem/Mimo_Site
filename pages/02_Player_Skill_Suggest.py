@@ -81,7 +81,7 @@ def main():
         sdict = pickle.load(file)
 
     st.write('Enter Player ID to obtain Skill Suggestion.')
-    st.write("Mimo Skill Fit Score goes between 0 to 100. Higher means the skill fits the player better.")
+    st.write("Mimo Skill Fit Score goes between 0 to 100. Higher means the model thinks the player should have this skill based on stats.")
     st.write("Generally, >70 is very nice to add, 30-70 is nice to have but not essential")
 
     with st.expander("Player ID Search by Name"):
@@ -126,7 +126,7 @@ def main():
             
         else:
             st.write('Player {} not found.'.format(pid))
-            
+
     st.divider()
     st.write('Example Player ID:')
     st.write(adf[adf['Player ID'].isin([str(i) for i in common_picks])][['Player ID', 'Overall Rating','Player Name','pack']].reset_index(drop = True))

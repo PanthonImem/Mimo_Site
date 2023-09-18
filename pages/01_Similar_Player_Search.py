@@ -135,7 +135,7 @@ def main():
                 if show_base_only:
                     tempdf = tempdf[tempdf.pack == 'base']
 
-                tempdf = tempdf.drop_duplicates(['Player Name','Playstyle']).reset_index(drop = True)
+                tempdf = tempdf#.drop_duplicates(['Player Name','Playstyle']).reset_index(drop = True)
                 tempdf = tempdf.sort_values('stat_dist')
                 tempdf = tempdf[tempdf.stat_dist>0]
                 return tempdf
@@ -214,7 +214,7 @@ def main():
                 st.caption('There is no lite version for this player. Try increasing search threshold.')
         else:
             st.caption('Player Not Found')
-            
+
     st.divider()
     st.write('Example Player ID:')
     st.write(adf[adf['Player ID'].isin([str(i) for i in common_picks])][['Player ID', 'Overall Rating','Player Name','pack']].reset_index(drop = True))
