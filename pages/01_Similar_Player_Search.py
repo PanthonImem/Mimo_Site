@@ -81,10 +81,8 @@ def load_data():
 	return pd.read_csv('data/mimo_dataset.csv')
 
 def main():
-
-    
-
     st.set_page_config(layout="wide")
+    hide_github()
     st.title("Similar Player Search")
     st.write('This tool search for players with similar stats and playstyle. Input their ID or search Player ID by Name below:')
     adf = load_data()
