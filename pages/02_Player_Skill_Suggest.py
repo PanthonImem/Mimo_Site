@@ -8,6 +8,11 @@ import sklearn
 import warnings
 warnings.filterwarnings('ignore')
 
+import sys
+sys.path.append("../code")
+from utility import hide_github
+
+
 common_picks = [88029649833393, 88029649836770, 88029649833414, 105624520229984, 105624520206751, 105624520215799, 105625325514975,
        105625325547356, 105625325513700, 105625325463961, 105625325510796,
        105625325514599, 105625325510960, 105625325542316]
@@ -72,6 +77,7 @@ def load_data():
 
 def main():
     st.set_page_config(layout="centered")
+    hide_github()
     st.title("Mimo Skill Suggest")
     st.write('Powered by :orange[Mimo Skill Fit Score]')
     adf = load_data()

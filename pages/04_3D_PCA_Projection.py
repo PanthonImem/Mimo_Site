@@ -10,6 +10,10 @@ import plotly.express as px
 import warnings
 warnings.filterwarnings('ignore')
 
+import sys
+sys.path.append("code")
+from utility import hide_github
+
 @st.cache_data
 def load_data():
 	return pd.read_csv('data/mimo_dataset.csv')
@@ -57,10 +61,10 @@ def get_activated(pos):
 
 def main():
 
+    st.set_page_config(layout="wide")
+    hide_github()
     if 'show_graph' not in st.session_state:
         st.session_state['show_graph'] = False
-
-    st.set_page_config(layout="wide")
 
     st.title("The World of Efootball Players")
     st.write("The plot below is a PCA projection of player stats onto 3D -- closer players are more similar")

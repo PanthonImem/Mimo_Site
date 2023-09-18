@@ -4,6 +4,12 @@ import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
 
+import sys
+sys.path.append("code")
+from utility import hide_github
+
+
+
 def main():
     st.title("Welcome to the Mimo Site!")
 
@@ -32,6 +38,7 @@ def main():
     st.write("Currently there is a known issue that is PESDB is missing maximum level for most of the base players. I'll update this site when they do")
     
     st.write('For contact please DM me on [Reddit](https://www.reddit.com/user/Mimobrok).')
+    hide_github()
 
 if __name__ == "__main__":
     main()

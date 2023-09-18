@@ -4,6 +4,12 @@ import streamlit as st
 
 import warnings
 warnings.filterwarnings('ignore')
+
+import sys
+sys.path.append("code")
+from utility import hide_github
+
+
 activate_dict = {
     'Goal Poacher': ['CF'],
     'Fox in the Box': ['CF'],
@@ -43,6 +49,8 @@ def load_data():
 
 def main():
     st.set_page_config(layout="wide")
+    hide_github()
+    
     st.title("POTW Pack Explorer")
 
     adf = load_data()

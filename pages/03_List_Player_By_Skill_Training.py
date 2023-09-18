@@ -6,6 +6,10 @@ import streamlit as st
 import warnings
 warnings.filterwarnings('ignore')
 
+import sys
+sys.path.append("code")
+from utility import hide_github
+
 sset = ['Acrobatic Clear',
  'Acrobatic Finishing',
  'Aerial Superiority',
@@ -72,6 +76,7 @@ def load_data():
 
 def main():
     st.set_page_config(layout="wide")
+    hide_github()
     st.title("Mimo Player Search by Skill")
     adf = load_data()
     adf['Player ID'] = adf['Player ID'].astype(str)
