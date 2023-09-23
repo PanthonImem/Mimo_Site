@@ -39,6 +39,50 @@ ability_cols = ['Offensive Awareness',
  'Balance',
  'Stamina']
 
+sset = ['Acrobatic Clear',
+ 'Acrobatic Finishing',
+ 'Aerial Superiority',
+ 'Blocker',
+ 'Captaincy',
+ 'Chip Shot Control',
+ 'Chop Turn',
+ 'Cut Behind &; Turn',
+ 'Dipping Shot',
+ 'Double Touch',
+ 'Fighting Spirit',
+ 'First-time Shot',
+ 'Flip Flap',
+ 'GK High Punt',
+ 'GK Long Throw',
+ 'GK Low Punt',
+ 'GK Penalty Saver',
+ 'Gamesmanship',
+ 'Heading',
+ 'Heel Trick',
+ 'Interception',
+ 'Knuckle Shot',
+ 'Long Range Shooting',
+ 'Long-Range Curler',
+ 'Low Lofted Pass',
+ 'Man Marking',
+ 'Marseille Turn',
+ 'No Look Pass',
+ 'One-touch Pass',
+ 'Outside Curler',
+ 'Penalty Specialist',
+ 'Pinpoint Crossing',
+ 'Rabona',
+ 'Rising Shot',
+ 'Scissors Feint',
+ 'Scotch Move',
+ 'Sliding Tackle',
+ 'Sole Control',
+ 'Sombrero',
+ 'Super-sub',
+ 'Through Passing',
+ 'Track Back',
+ 'Weighted Pass']
+
 activate_dict = {
     'Goal Poacher': ['CF'],
     'Fox in the Box': ['CF'],
@@ -118,8 +162,7 @@ def main():
     pid = col1.text_input("Enter Player ID:", help = 'Player ID is a number unique to each player in the game.\
      You can obtain the player ID of each card from the URL of any Database website such as PESDB or EFHub or the Search by Name tool above.')
     col1, col2, col3 = st.columns(3)
-    col_per = col1
-    
+    col_per = col1    
     
     if pid:
         pdf = adf[adf['Player ID'] == pid].reset_index(drop = True)
@@ -290,10 +333,82 @@ def main():
             display_skill(col4, 'Acrobatic Clear')
             display_skill(col4, 'Sliding Tackle')
 
-            
-
             st.divider()
-    
+            st.subheader('Version Comparison')
+            if bdf.shape[0]==0:
+                bdf = pdf.copy()
+            cdf = pd.concat([pdf,
+                            adf[(adf['Player Name'].values==pdf['Player Name'].values[0])&(adf['Player ID']!=pid)].sort_values('max_ovr_rating', ascending = False)
+                            ])            
+
+            def plot_comparison(stat):
+                cols = st.columns([0.1]+[0.8/cdf.shape[0]]*cdf.shape[0])
+                cols[0].markdown(f'{stat}')
+                for i in range(cdf.shape[0]):
+                    if(stat in ['Player Name','pack','Playstyle']):
+                        if(stat == 'Playstyle'):
+                            if(cdf[stat].values[i] != bdf[stat].values[0]):
+                                cols[i+1].markdown(':violet['+str(cdf[stat].values[i])+']')
+                            else:
+                                cols[i+1].markdown(':black['+str(cdf[stat].values[i])+']')
+
+                        else:
+                            cols[i+1].markdown(':black['+str(cdf[stat].values[i])+']')
+                    elif stat in (['OR at {}'.format(pos)]):
+                        stat = 'or_'+pos
+                        if(cdf[stat].values[i] == cdf[stat].max()):
+                            cols[i+1].markdown(':violet['+str(cdf[stat].values[i])+']')
+                        elif(cdf[stat].values[i] > bdf[stat].values[0]):
+                            cols[i+1].markdown(':green['+str(cdf[stat].values[i])+']')
+                        elif(cdf[stat].values[i] < bdf[stat].values[0]):
+                            cols[i+1].markdown(':red['+str(cdf[stat].values[i])+']')
+                        else:
+                            cols[i+1].markdown(':orange['+str(cdf[stat].values[i])+']')
+                    else:
+                        if(cdf[stat].values[i] == cdf[stat].max()):
+                            cols[i+1].markdown(':violet['+str(cdf[stat].values[i])+']')
+                        elif(cdf[stat].values[i] > bdf[stat].values[0]):
+                            cols[i+1].markdown(':green['+str(cdf[stat].values[i])+']')
+                        elif(cdf[stat].values[i] < bdf[stat].values[0]):
+                            cols[i+1].markdown(':red['+str(cdf[stat].values[i])+']')
+                        else:
+                            cols[i+1].markdown(':orange['+str(cdf[stat].values[i])+']')
+            def plot_skill_added():
+                cols = st.columns([0.1]+[0.8/cdf.shape[0]]*cdf.shape[0])
+                cols[0].markdown('Skill Added')
+                for i in range(cdf.shape[0]):
+                    ls = []
+                    for skill in sset:
+                        if((cdf['s_'+skill].values[i]==1)&(bdf['s_'+skill].values[0]==0)):
+                            ls.append(skill)
+                    if(len(ls)):
+                        cols[i+1].markdown(':green[' + ', '.join(ls)+']')
+                    else:
+                        cols[i+1].markdown(' ')
+            def plot_skill_loss():
+                cols = st.columns([0.1]+[0.8/cdf.shape[0]]*cdf.shape[0])
+                cols[0].markdown('Skill Lost')
+                for i in range(cdf.shape[0]):
+                    ls = []
+                    for skill in sset:
+                        if((cdf['s_'+skill].values[i]==0)&(bdf['s_'+skill].values[0]==1)):
+                            ls.append(skill)
+                    if(len(ls)):
+                        cols[i+1].markdown(':red['+ ', '.join(ls)+']')
+                    else:
+                        cols[i+1].markdown(' ')
+            
+            plot_comparison('Overall Rating')
+            plot_comparison('OR at {}'.format(pos))
+            plot_comparison('Player Name')
+            plot_comparison('Playstyle')
+            plot_comparison('pack')
+            for ability in ability_cols:
+                if(pos!='GK' and 'GK' not in ability):
+                    plot_comparison(ability)
+            plot_skill_added()
+            plot_skill_loss()
+            
 
 if __name__ == "__main__":
     main()
