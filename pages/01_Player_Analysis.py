@@ -185,8 +185,11 @@ def main():
                 if bdf.shape[0] == 0:
                     col2.text('Base Player Not Found')
                     comp_base = False
+                    bdf = pdf.copy()
                 else:
                     pstr =  "(from {})".format(bdf['Playstyle'].values[0]) if comp_base and bdf['Playstyle'].values[0]!=pdf['Playstyle'].values[0] else ''
+            else:
+                bdf = pdf.copy()
 
             col1.write("Pack: {}".format(pdf['pack'].values[0].lstrip()))
             
@@ -335,8 +338,7 @@ def main():
 
             st.divider()
             st.subheader('Version Comparison')
-            if bdf.shape[0]==0:
-                bdf = pdf.copy()
+               
             cdf = pd.concat([pdf,
                             adf[(adf['Player Name'].values==pdf['Player Name'].values[0])&(adf['Player ID']!=pid)].sort_values('max_ovr_rating', ascending = False)
                             ])            
