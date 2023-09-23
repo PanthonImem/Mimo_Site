@@ -95,16 +95,16 @@ def main():
     st.markdown("""
     <style>
     [data-testid=column]:nth-of-type(1) [data-testid=stVerticalBlock]{
-        gap: 0.1rem;
+        gap: 0.05rem;
     }
     [data-testid=column]:nth-of-type(2) [data-testid=stVerticalBlock]{
-        gap: 0.1rem;
+        gap: 0.05rem;
     }
     [data-testid=column]:nth-of-type(3) [data-testid=stVerticalBlock]{
-        gap: 0.1rem;
+        gap: 0.05rem;
     }
     [data-testid=column]:nth-of-type(4) [data-testid=stVerticalBlock]{
-        gap: 0.1rem;
+        gap: 0.05rem;
     }
     </style>
     """,unsafe_allow_html=True)
@@ -118,56 +118,81 @@ def main():
     pid = col1.text_input("Enter Player ID:", help = 'Player ID is a number unique to each player in the game.\
      You can obtain the player ID of each card from the URL of any Database website such as PESDB or EFHub or the Search by Name tool above.')
     col1, col2, col3 = st.columns(3)
-
+    col_per = col1
+    
+    
     if pid:
         pdf = adf[adf['Player ID'] == pid].reset_index(drop = True)
         if pdf.shape[0]:
 
             pos = pdf['max_position'].values[0].split(',')[0]
             posls = ast.literal_eval(pdf['Possible Positions'].values[0])
-
-
+            pos = col2.selectbox("Pick Position for Analysis", posls, posls.index(pos))
             col1.header(str(pdf['or_'+pos].values[0])+' '+pdf['Player Name'].values[0])
 
             col1, col2, col3 = st.columns(3)
 
-            col1.write("Pack: {}".format(pdf['pack'].values[0].lstrip()))
+            
             col2.write("Best Positions: {} at {}".format(pdf['max_ovr_rating'].values[0], pdf['max_position'].values[0]))
-            col1.write("Playstyle: {} {}".format(pdf['Playstyle'].values[0], "(Inactivated)" if pdf['Playstyle'].values[0] in get_unactivated(pos) else ''))
+            comp_base = col2.checkbox('Compare to Base', value = True)
+            if comp_base:
+                bdf = adf[(adf['Player Name']==pdf['Player Name'].values[0])&(adf['pack']=='base')]
+
+            col1.write("Pack: {}".format(pdf['pack'].values[0].lstrip()))
+            
+            col1.write("Playstyle: {} {} {}".format(pdf['Playstyle'].values[0],\
+             "(Inactivated)" if pdf['Playstyle'].values[0] in get_unactivated(pos) else '',\
+             "(from {})".format(bdf['Playstyle'].values[0]) if comp_base and bdf['Playstyle'].values[0]!=pdf['Playstyle'].values[0] else ''))
 
             col1.write("Form: {}".format(pdf['Form'].values[0]))
-            pos = col2.selectbox("Pick Position for Analysis", posls, posls.index(pos))
             
-
+            
+            
             def display_stat(col, stat):
                 def autocolor(val):
                     cutoff = np.array([-0.75, 0.75, 1.5])
                     colorls = ['red','orange','green','violet']
                     ind = np.sum(val>cutoff)
                     return colorls[ind]
-                col1, col2, col3 = col.columns([0.7, 0.2, 0.1])
+                col1, col2, col3 = col.columns([0.6, 0.2, 0.2])
                 val = np.round((pdf[stat].values[0]-refdict[pos][stat]['mean'])/refdict[pos][stat]['std'],2)
                 colstr = autocolor(val)
                 col1.markdown(f'{stat}')
                 col2.markdown(':'+colstr+'['+f'{pdf[stat].values[0]}]')
 
+                if comp_base:
+                    diff = pdf[stat].values[0]-bdf[stat].values[0]
+                    if(diff > 0):
+                        col3.markdown(':green[+'+str(diff)+']')
+                    elif(diff<0):
+                        col3.markdown(':red['+str(diff)+']')
+
             def display_skill(col, skill):
-                col1, col2, col3 = col.columns([0.7, 0.2, 0.1])
+                col1, col2, col3 = col.columns([0.6, 0.2, 0.2])
                 col1.write(f'{skill}')
                 if pdf['s_'+skill].values[0]==1:
                     col2.write(':green[✓]')
                 else:
                     col2.write(' ')
 
+                if comp_base:
+                    if bdf['s_'+skill].values[0]==0 and pdf['s_'+skill].values[0]==1:
+                        col3.write(':green[+]')
+                    elif bdf['s_'+skill].values[0]==1 and pdf['s_'+skill].values[0]==0:
+                        col3.write(':red[x]')
+                    
+
             def display_weak_foot(col, weak_foot):
                 wf_dict = { "Almost Never": 'red', 'Rarely':'orange', 'Regularly': 'green', "Occasionally" :"violet", \
                     "Low": 'red',  "Medium": 'orange',"High":  'green', "Very High": "violet"}
-                col1, col2 = col.columns([0.7, 0.3])
+                col1, col2 = col.columns([0.6, 0.4])
                 col1.write(f'{weak_foot}')
                 col2.write(f':{wf_dict[pdf[weak_foot].values[0]]}[{pdf[weak_foot].values[0]}]')
 
 
             col1, col2, col3, col4, col5 = st.columns(5) 
+
+
             col1.subheader('Attacking')
             display_stat(col1, 'Offensive Awareness')
             display_stat(col1, 'Finishing')
