@@ -135,18 +135,23 @@ def main():
             
             col2.write("Best Positions: {} at {}".format(pdf['max_ovr_rating'].values[0], pdf['max_position'].values[0]))
             comp_base = col2.checkbox('Compare to Base', value = True)
+
+            pstr = ""
             if comp_base:
                 bdf = adf[(adf['Player Name']==pdf['Player Name'].values[0])&(adf['pack']=='base')]
+                if bdf.shape[0] == 0:
+                    col2.text('Base Player Not Found')
+                    comp_base = False
+                else:
+                    pstr =  "(from {})".format(bdf['Playstyle'].values[0]) if comp_base and bdf['Playstyle'].values[0]!=pdf['Playstyle'].values[0] else ''
 
             col1.write("Pack: {}".format(pdf['pack'].values[0].lstrip()))
             
             col1.write("Playstyle: {} {} {}".format(pdf['Playstyle'].values[0],\
              "(Inactivated)" if pdf['Playstyle'].values[0] in get_unactivated(pos) else '',\
-             "(from {})".format(bdf['Playstyle'].values[0]) if comp_base and bdf['Playstyle'].values[0]!=pdf['Playstyle'].values[0] else ''))
+            pstr))
 
             col1.write("Form: {}".format(pdf['Form'].values[0]))
-            
-            
             
             def display_stat(col, stat):
                 def autocolor(val):
@@ -154,7 +159,7 @@ def main():
                     colorls = ['red','orange','green','violet']
                     ind = np.sum(val>cutoff)
                     return colorls[ind]
-                col1, col2, col3 = col.columns([0.6, 0.2, 0.2])
+                col1, col2, col3 = col.columns([0.7, 0.15, 0.15])
                 val = np.round((pdf[stat].values[0]-refdict[pos][stat]['mean'])/refdict[pos][stat]['std'],2)
                 colstr = autocolor(val)
                 col1.markdown(f'{stat}')
@@ -168,7 +173,7 @@ def main():
                         col3.markdown(':red['+str(diff)+']')
 
             def display_skill(col, skill):
-                col1, col2, col3 = col.columns([0.6, 0.2, 0.2])
+                col1, col2, col3 = col.columns([0.7, 0.15, 0.15])
                 col1.write(f'{skill}')
                 if pdf['s_'+skill].values[0]==1:
                     col2.write(':green[✓]')
@@ -185,7 +190,7 @@ def main():
             def display_weak_foot(col, weak_foot):
                 wf_dict = { "Almost Never": 'red', 'Rarely':'orange', 'Regularly': 'green', "Occasionally" :"violet", \
                     "Low": 'red',  "Medium": 'orange',"High":  'green', "Very High": "violet"}
-                col1, col2 = col.columns([0.6, 0.4])
+                col1, col2 = col.columns([0.7, 0.3])
                 col1.write(f'{weak_foot}')
                 col2.write(f':{wf_dict[pdf[weak_foot].values[0]]}[{pdf[weak_foot].values[0]}]')
 
