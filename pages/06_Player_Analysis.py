@@ -86,7 +86,7 @@ def main():
     adf['Player ID'] = adf['Player ID'].astype(str)
     adf['Player Name_dcd'] = adf.apply(lambda row: unidecode(row['Player Name'].lower()), axis = 1)
 
-    with open('../Mimo_Site/data/stat_stat_by_position.pkl', 'rb') as file:
+    with open('data/stat_stat_by_position.pkl', 'rb') as file:
         refdict = pickle.load(file)
 
     with open('data/main_skill_stat_dict.pkl', 'rb') as file:
