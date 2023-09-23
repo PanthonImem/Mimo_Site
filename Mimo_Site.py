@@ -23,6 +23,7 @@ def main():
     st.write('- [List Players by Skill(s) Training](https://mimo-site.streamlit.app/List_Player_By_Skill_Training)')
     st.write('- [2D PCA Projection(Dimensionality Reduction) of Player Stats](https://mimo-site.streamlit.app/3D_PCA_Projection)')
     st.write('- [POTW Explorer](https://mimo-site.streamlit.app/POTW_Explorer)')
+    st.write('- [Player Analysis](https://mimo-site.streamlit.app/Player_Analysis)')
     
    
 
@@ -30,6 +31,7 @@ def main():
      This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please use laptop if possible.")
     
     st.subheader('Recent Changelog:')
+    st.write('22/09/23 - Add Player Analysis Tool v1')
     st.write('22/09/23 - Add a few legacy carryover IMs that were previously excluded because of wrong max level')
     st.write('21/09/23 - Thursday data update')
     st.write('19/09/23 - Add players to database. 1000+ Base players now available.')
