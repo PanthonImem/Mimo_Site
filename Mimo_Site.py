@@ -30,7 +30,7 @@ def main():
      This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please use laptop if possible.")
     
     st.subheader('Recent Changelog:')
-
+    st.write('22/09/23 - Add a few legacy carryover IMs that were previously excluded because of wrong max level')
     st.write('21/09/23 - Thursday data update')
     st.write('19/09/23 - Add players to database. 1000+ Base players now available.')
 
