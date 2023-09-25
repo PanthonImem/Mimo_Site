@@ -152,9 +152,9 @@ def main():
     }
     </style>
     """,unsafe_allow_html=True)
-
-    
-
+    if "pid" not in st.session_state:
+        st.session_state.pid = None
+    pid = st.session_state.pid
     #Player Search Snippet
     col1, col2 = st.columns(2)
     pack = col1.selectbox('Recent Packs', adf['pack'].unique()[-10:][::-1])
@@ -168,11 +168,11 @@ def main():
     def toggle():
         if st.session_state.expanded:
             st.session_state.expanded = False
-    pid = None
     input_name = st.text_input("Type Player ID or Player Name", help = "Type Player ID or Part of player name to search.")
     is_numeric = lambda s: s.isdigit()
     if is_numeric(input_name):
-        pid = input_name
+        st.session_state.pid = input_name
+        pid = st.session_state.pid
     else:
         name_part = input_name.lower()
         if name_part:
@@ -188,7 +188,8 @@ def main():
                 for i in range(df.shape[0]):
                     col1, col2, col3, col4, col5, col6, col7 = st.columns([0.075, 0.05, 0.1, 0.15, 0.055, 0.07, 0.50])
                     if col1.button(label ='Select', key = df['Player ID'].values[i],type = 'primary', on_click = toggle):
-                        pid = df['Player ID'].values[i]
+                        st.session_state.pid =  df['Player ID'].values[i]
+                        pid = st.session_state.pid
                     col2.write(str(df['Overall Rating'].values[i]))
                     col3.write('['+df['Player Name'].values[i]+']({})'.format('https://efootballhub.net/efootball23/player/'+str(df['Player ID'].values[i])))
                     col4.write(df['pack'].values[i])
