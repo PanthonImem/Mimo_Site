@@ -94,6 +94,10 @@ def main():
     with open('data/main_skill_stat_dict.pkl', 'rb') as file:
         main_skill_stat_dict = pickle.load(file)
 
+    
+    if "pid" not in st.session_state:
+        st.session_state.pid = None
+    pid = st.session_state.pid
     #Player Search Snippet
     col1, col2 = st.columns(2)
     pack = col1.selectbox('Recent Packs', adf['pack'].unique()[-10:][::-1])
@@ -107,11 +111,11 @@ def main():
     def toggle():
         if st.session_state.expanded:
             st.session_state.expanded = False
-    pid = None
     input_name = st.text_input("Type Player ID or Player Name", help = "Type Player ID or Part of player name to search.")
     is_numeric = lambda s: s.isdigit()
     if is_numeric(input_name):
-        pid = input_name
+        st.session_state.pid = input_name
+        pid = st.session_state.pid
     else:
         name_part = input_name.lower()
         if name_part:
@@ -127,13 +131,15 @@ def main():
                 for i in range(df.shape[0]):
                     col1, col2, col3, col4, col5, col6, col7 = st.columns([0.075, 0.05, 0.1, 0.15, 0.055, 0.07, 0.50])
                     if col1.button(label ='Select', key = df['Player ID'].values[i],type = 'primary', on_click = toggle):
-                        pid = df['Player ID'].values[i]
+                        st.session_state.pid =  df['Player ID'].values[i]
+                        pid = st.session_state.pid
                     col2.write(str(df['Overall Rating'].values[i]))
                     col3.write('['+df['Player Name'].values[i]+']({})'.format('https://efootballhub.net/efootball23/player/'+str(df['Player ID'].values[i])))
                     col4.write(df['pack'].values[i])
                     col5.write(df['Position'].values[i])
                     col6.write(df['Playstyle'].values[i])
-
+    
+    col1, col2 = st.columns(2)
     show_base_only = col1.checkbox('Show Base Player Only')
     if not show_base_only:
         threshold = col1.select_slider("Select Maximum Stat Distance Threshold", [0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2], 0.7, help = 'Larger value will return more players, but will be less similar')
