@@ -26,13 +26,11 @@ def main():
     st.write('- [2D PCA Projection(Dimensionality Reduction) of Player Stats](https://mimo-site.streamlit.app/3D_PCA_Projection)')
     st.write('- [POTW Explorer](https://mimo-site.streamlit.app/POTW_Explorer)')
     
-    
-   
-
     st.write("This website is currently hosted (for free) on :blue[Streamlit Community Cloud].\
      This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please use laptop if possible.")
     
     st.subheader('Recent Changelog:')
+    st.write('24/09/23 - Monday data update')
     st.write('23/09/23 - Add Version Comparison section to Player Analysis Tool')
     st.write('22/09/23 - Add Player Analysis Tool v1')
     st.write('22/09/23 - Add a few legacy carryover IMs that were previously excluded because of wrong max level')

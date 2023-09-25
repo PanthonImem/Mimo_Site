@@ -174,7 +174,6 @@ def main():
             col1.header(str(pdf['or_'+pos].values[0])+' '+pdf['Player Name'].values[0])
 
             col1, col2, col3 = st.columns(3)
-
             
             col2.write("Best Positions: {} at {}".format(pdf['max_ovr_rating'].values[0], pdf['max_position'].values[0]))
             comp_base = col2.checkbox('Compare to Base', value = True)
