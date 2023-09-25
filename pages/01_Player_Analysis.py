@@ -160,8 +160,8 @@ def main():
     pack = col1.selectbox('Recent Packs', adf['pack'].unique()[-10:][::-1])
     if pack:
         with st.expander(':violet[{}]'.format(pack)):
-            st.write(adf[adf.pack == pack][['Player ID','Overall Rating','Player Name','Position','pack']]\
-            .sort_values('Overall Rating', ascending = False).reset_index(drop = True))
+            st.write(adf[adf.pack == pack][['Player ID','Overall Rating','Position','Player Name','max_ovr_rating','max_position','pack']]\
+            .sort_values('max_ovr_rating', ascending = False).reset_index(drop = True))
     if "expanded" not in st.session_state:
         st.session_state.expanded = True
     # write a function for toggle functionality
