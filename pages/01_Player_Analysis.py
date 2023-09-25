@@ -153,17 +153,41 @@ def main():
     </style>
     """,unsafe_allow_html=True)
 
-    with st.expander("Player ID Search by Name"):
-        name_part = st.text_input("Type Player Name", help = "Type part of player name to search.")
-        name_part = name_part.lower()
+    #Player Search Snippet
+    if "expanded" not in st.session_state:
+        st.session_state.expanded = True
+    # write a function for toggle functionality
+    def toggle():
+        if st.session_state.expanded:
+            st.session_state.expanded = False
+    pid = None
+    input_name = st.text_input("Type Player ID or Player Name", help = "Type Player ID or Part of player name to search.")
+    is_numeric = lambda s: s.isdigit()
+    if is_numeric(input_name):
+        pid = input_name
+    else:
+        name_part = input_name.lower()
         if name_part:
-            st.write(adf[adf['Player Name_dcd'].str.contains(name_part)][['Player ID', 'Overall Rating','Player Name','pack']].sort_values('Overall Rating', ascending = False).reset_index(drop = True))
-    col1, col2, col3 = st.columns(3)
-    pid = col1.text_input("Enter Player ID:", help = 'Player ID is a number unique to each player in the game.\
-     You can obtain the player ID of each card from the URL of any Database website such as PESDB or EFHub or the Search by Name tool above.')
+            df = adf[adf['Player Name_dcd'].str.contains(name_part)].sort_values('max_ovr_rating', ascending = False).reset_index(drop = True)
+            with st.expander('Showing Versions of ":violet[{}]"'.format(input_name), expanded = st.session_state.expanded):
+                col1, col2, col3, col4, col5, col6, col7 = st.columns([0.075, 0.05, 0.1, 0.15, 0.055, 0.07, 0.50])
+                col1.write('')
+                col2.write('Ovr. Rat.')
+                col3.write('Name')
+                col4.write('Pack')
+                col5.write('Position')
+                col6.write('Playstyle')
+                for i in range(df.shape[0]):
+                    col1, col2, col3, col4, col5, col6, col7 = st.columns([0.075, 0.05, 0.1, 0.15, 0.055, 0.07, 0.50])
+                    if col1.button(label ='Select', key = df['Player ID'].values[i],type = 'primary', on_click = toggle):
+                        pid = df['Player ID'].values[i]
+                    col2.write(str(df['Overall Rating'].values[i]))
+                    col3.write('['+df['Player Name'].values[i]+']({})'.format('https://efootballhub.net/efootball23/player/'+str(df['Player ID'].values[i])))
+                    col4.write(df['pack'].values[i])
+                    col5.write(df['Position'].values[i])
+                    col6.write(df['Playstyle'].values[i])    
     col1, col2, col3 = st.columns(3)
     col_per = col1    
-    
     if pid:
         pdf = adf[adf['Player ID'] == pid].reset_index(drop = True)
         if pdf.shape[0]:
@@ -239,6 +263,12 @@ def main():
                 col1.write(f'{weak_foot}')
                 col2.write(f':{wf_dict[pdf[weak_foot].values[0]]}[{pdf[weak_foot].values[0]}]')
 
+            def display_strong_foot(col):
+                col1, col2 = col.columns([0.7, 0.3])
+                col1.write('Foot')
+                col2.write('{}'.format(':green['+pdf['Stronger Foot'].values[0].split(' ')[0]+']'))
+
+
 
             col1, col2, col3, col4, col5 = st.columns(5) 
 
@@ -249,6 +279,7 @@ def main():
             display_skill(col1, 'First-time Shot')
             display_skill(col1, 'Acrobatic Finishing')
             display_skill(col1, 'Chip Shot Control')
+            display_strong_foot(col1)
             display_weak_foot(col1, 'Weak Foot Usage')
             display_weak_foot(col1, 'Weak Foot Accuracy')
             col1.caption('---')

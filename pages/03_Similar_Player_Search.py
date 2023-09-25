@@ -97,15 +97,40 @@ def main():
     with open('data/main_skill_stat_dict.pkl', 'rb') as file:
         main_skill_stat_dict = pickle.load(file)
 
-    with st.expander("Player ID Search by Name"):
-        name_part = st.text_input("Type Player Name", help = "Type part of player name to search.")
-        name_part = name_part.lower()
+    #Player Search Snippet
+    if "expanded" not in st.session_state:
+        st.session_state.expanded = True
+    # write a function for toggle functionality
+    def toggle():
+        if st.session_state.expanded:
+            st.session_state.expanded = False
+    pid = None
+    input_name = st.text_input("Type Player ID or Player Name", help = "Type Player ID or Part of player name to search.")
+    is_numeric = lambda s: s.isdigit()
+    if is_numeric(input_name):
+        pid = input_name
+    else:
+        name_part = input_name.lower()
         if name_part:
-            st.write(adf[adf['Player Name_dcd'].str.contains(name_part)][['Player ID', 'Overall Rating','Player Name','pack']].sort_values('Overall Rating', ascending = False).reset_index(drop = True))
-    col1, col2, col3 = st.columns(3)
-    pid = col1.text_input("Enter Player ID:", help = 'Player ID is a number unique to each player in the game.\
-     You can obtain the player ID of each card from the URL of any Database website such as PESDB or EFHub or the Search by Name tool above.')
-
+            df = adf[adf['Player Name_dcd'].str.contains(name_part)].sort_values('max_ovr_rating', ascending = False).reset_index(drop = True)
+            with st.expander('Showing Versions of ":violet[{}]"'.format(input_name), expanded = st.session_state.expanded):
+                col1, col2, col3, col4, col5, col6, col7 = st.columns([0.075, 0.05, 0.1, 0.15, 0.055, 0.07, 0.50])
+                col1.write('')
+                col2.write('Ovr. Rat.')
+                col3.write('Name')
+                col4.write('Pack')
+                col5.write('Position')
+                col6.write('Playstyle')
+                for i in range(df.shape[0]):
+                    col1, col2, col3, col4, col5, col6, col7 = st.columns([0.075, 0.05, 0.1, 0.15, 0.055, 0.07, 0.50])
+                    if col1.button(label ='Select', key = df['Player ID'].values[i],type = 'primary', on_click = toggle):
+                        pid = df['Player ID'].values[i]
+                    col2.write(str(df['Overall Rating'].values[i]))
+                    col3.write('['+df['Player Name'].values[i]+']({})'.format('https://efootballhub.net/efootball23/player/'+str(df['Player ID'].values[i])))
+                    col4.write(df['pack'].values[i])
+                    col5.write(df['Position'].values[i])
+                    col6.write(df['Playstyle'].values[i])
+                    
     show_base_only = col1.checkbox('Show Base Player Only')
     if not show_base_only:
         threshold = col1.select_slider("Select Maximum Stat Distance Threshold", [0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2], 0.7, help = 'Larger value will return more players, but will be less similar')
