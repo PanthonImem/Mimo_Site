@@ -153,7 +153,15 @@ def main():
     </style>
     """,unsafe_allow_html=True)
 
+    
+
     #Player Search Snippet
+    col1, col2 = st.columns(2)
+    pack = col1.selectbox('Recent Packs', adf['pack'].unique()[-10:][::-1])
+    if pack:
+        with st.expander(':violet[{}]'.format(pack)):
+            st.write(adf[adf.pack == pack][['Player ID','Overall Rating','Player Name','Position','pack']]\
+            .sort_values('Overall Rating', ascending = False).reset_index(drop = True))
     if "expanded" not in st.session_state:
         st.session_state.expanded = True
     # write a function for toggle functionality

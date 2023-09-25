@@ -92,6 +92,12 @@ def main():
     st.write("Generally, >70 is very nice to add, 30-70 is nice to have but not essential")
 
     #Player Search Snippet
+    col1, col2 = st.columns(2)
+    pack = col1.selectbox('Recent Packs', adf['pack'].unique()[-10:][::-1])
+    if pack:
+        with st.expander(':violet[{}]'.format(pack)):
+            st.write(adf[adf.pack == pack][['Player ID','Overall Rating','Player Name','Position','pack']]\
+            .sort_values('Overall Rating', ascending = False).reset_index(drop = True))
     if "expanded" not in st.session_state:
         st.session_state.expanded = True
     # write a function for toggle functionality
@@ -99,7 +105,7 @@ def main():
         if st.session_state.expanded:
             st.session_state.expanded = False
     pid = None
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     input_name = col1.text_input("Type Player ID or Player Name", help = "Type Player ID or Part of player name to search.")
     is_numeric = lambda s: s.isdigit()
     if is_numeric(input_name):

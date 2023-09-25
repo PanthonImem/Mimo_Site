@@ -98,6 +98,12 @@ def main():
         main_skill_stat_dict = pickle.load(file)
 
     #Player Search Snippet
+    col1, col2 = st.columns(2)
+    pack = col1.selectbox('Recent Packs', adf['pack'].unique()[-10:][::-1])
+    if pack:
+        with st.expander(':violet[{}]'.format(pack)):
+            st.write(adf[adf.pack == pack][['Player ID','Overall Rating','Player Name','Position','pack']]\
+            .sort_values('Overall Rating', ascending = False).reset_index(drop = True))
     if "expanded" not in st.session_state:
         st.session_state.expanded = True
     # write a function for toggle functionality
@@ -130,7 +136,7 @@ def main():
                     col4.write(df['pack'].values[i])
                     col5.write(df['Position'].values[i])
                     col6.write(df['Playstyle'].values[i])
-                    
+
     show_base_only = col1.checkbox('Show Base Player Only')
     if not show_base_only:
         threshold = col1.select_slider("Select Maximum Stat Distance Threshold", [0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2], 0.7, help = 'Larger value will return more players, but will be less similar')

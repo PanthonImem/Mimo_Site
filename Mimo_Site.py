@@ -30,6 +30,7 @@ def main():
      This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please use laptop if possible.")
     
     st.subheader('Recent Changelog:')
+    st.write('24/09/23 - Add Recent Pack Section')
     st.write('24/09/23 - Revamp Player ID/Name Input Function')
     st.write('24/09/23 - Monday data update')
     st.write('23/09/23 - Add Version Comparison section to Player Analysis Tool')
