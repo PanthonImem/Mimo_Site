@@ -85,8 +85,8 @@ def main():
         sdict = pickle.load(file)
 
     st.write('Enter Player ID to obtain Skill Suggestion.')
-    st.write("Mimo Skill Fit Score goes between 0 to 100. Higher means the model thinks the player should have this skill based on stats.")
-    st.write("Generally, >70 is very nice to add, 30-70 is nice to have but not essential")
+    st.caption("Mimo Skill Fit Score goes between 0 to 100. Higher means the model thinks the player should have this skill based on stats.")
+    st.caption("Generally, >70 is very nice to add, 30-70 is nice to have but not essential")
 
     #Player Search Snippet
     col1, col2 = st.columns(2)
