@@ -200,7 +200,6 @@ def main():
     if pid:
         pdf = adf[adf['Player ID'] == pid].reset_index(drop = True)
         if pdf.shape[0]:
-
             pos = pdf['max_position'].values[0].split(',')[0]
             posls = ast.literal_eval(pdf['Possible Positions'].values[0])
             pos = col2.selectbox("Pick Position for Analysis", posls, posls.index(pos))
@@ -208,9 +207,12 @@ def main():
 
             col1, col2, col3 = st.columns(3)
             
-            col2.write("Best Positions: {} at {}".format(pdf['max_ovr_rating'].values[0], pdf['max_position'].values[0]))
+            tmp_str = ''
+            if(pdf['max_ovr_rating_trained'].values[0]>pdf['max_ovr_rating'].values[0]):
+                tmp_str = "Can be trained as :violet[{} {}]".format(pdf['max_ovr_rating_trained'].values[0], pdf['max_position_trained'].values[0])
+            col2.write("Best Positions: {} at {} {}".format(pdf['max_ovr_rating'].values[0], pdf['max_position'].values[0], tmp_str))
+        
             comp_base = col2.checkbox('Compare to Base', value = True)
-
             pstr = ""
             if comp_base:
                 bdf = adf[(adf['Player Name']==pdf['Player Name'].values[0])&(adf['pack']=='base')]
