@@ -238,7 +238,7 @@ def main():
             
             def display_stat(col, stat):
                 def autocolor(val):
-                    cutoff = np.array([-0.75, 0.75, 1.5])
+                    cutoff = np.array([-0.6, 0.6, 1.2])
                     colorls = ['red','orange','green','violet']
                     ind = np.sum(val>cutoff)
                     return colorls[ind]
