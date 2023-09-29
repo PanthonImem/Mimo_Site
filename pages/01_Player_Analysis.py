@@ -150,6 +150,9 @@ def main():
     [data-testid=column]:nth-of-type(4) [data-testid=stVerticalBlock]{
         gap: 0.05rem;
     }
+    [data-testid=column]:nth-of-type(5) [data-testid=stVerticalBlock]{
+        gap: 0.05rem;
+    }
     </style>
     """,unsafe_allow_html=True)
     if "pid" not in st.session_state:
@@ -284,6 +287,7 @@ def main():
             col1, col2, col3, col4, col5 = st.columns(5) 
 
 
+            
             col1.subheader('Attacking')
             display_stat(col1, 'Offensive Awareness')
             display_stat(col1, 'Finishing')
@@ -376,6 +380,18 @@ def main():
             display_skill(col4, 'Blocker')
             display_skill(col4, 'Acrobatic Clear')
             display_skill(col4, 'Sliding Tackle')
+
+            if pos == 'GK':
+                col5.subheader('Goalkeeping')
+                display_stat(col5, 'GK Awareness')
+                display_stat(col5, 'GK Catching')
+                display_stat(col5, 'GK Parrying')
+                display_stat(col5, 'GK Reflexes')
+                display_stat(col5, 'GK Reach')
+                display_skill(col5, 'GK High Punt')
+                display_skill(col5, 'GK Low Punt')
+                display_skill(col5, 'GK Long Throw')
+                display_skill(col5, 'GK Penalty Saver')
 
             st.divider()
             st.subheader('Version Comparison')
