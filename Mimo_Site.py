@@ -30,6 +30,7 @@ def main():
      This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please use laptop if possible.")
     
     st.subheader('Recent Changelog:')
+    st.write('01/10/23 - Mondy data update')
     st.write('28/09/23 - Thursday data update & minor UI update')
     st.write('27/09/23 - Add max possible trained rating in Player Analysis')
     st.write('24/09/23 - Add Recent Pack Section')
