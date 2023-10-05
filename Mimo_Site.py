@@ -23,16 +23,17 @@ def main():
     st.write('- [Search Similar Player](https://mimo-site.streamlit.app/Similar_Player_Search)')
     st.write('- [Suggest Skills to add to specific player](https://mimo-site.streamlit.app/Player_Skill_Suggest)')
     st.write('- [List Players by Skill(s) Training](https://mimo-site.streamlit.app/List_Player_By_Skill_Training)')
-    st.write('- [2D PCA Projection(Dimensionality Reduction) of Player Stats](https://mimo-site.streamlit.app/3D_PCA_Projection)')
+    st.write('- [3D PCA Visualization(Dimensionality Reduction) of Player Stats](https://mimo-site.streamlit.app/3D_PCA_Projection)')
     st.write('- [POTW Explorer](https://mimo-site.streamlit.app/POTW_Explorer)')
     
     st.write("This website is currently hosted (for free) on :blue[Streamlit Community Cloud].\
-     This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please use laptop if possible.")
+     This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please access the site on a desktop device.")
     
     st.subheader('Recent Changelog:')
-    st.write('01/10/23 - Mondy data update')
+    st.write('05/10/23 - Thursday data update')
+    st.write('01/10/23 - Monday data update')
     st.write('28/09/23 - Thursday data update & minor UI update')
-    st.write('27/09/23 - Add max possible trained rating in Player Analysis')
+    st.write('27/09/23 - Add maximum possible trained rating in Player Analysis')
     st.write('24/09/23 - Add Recent Pack Section')
     st.write('24/09/23 - Revamp Player ID/Name Input Function')
     st.write('24/09/23 - Monday data update')
