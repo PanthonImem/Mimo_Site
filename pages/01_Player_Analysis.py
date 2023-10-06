@@ -110,6 +110,19 @@ activate_dict = {
     '---':[],
 }
 
+adjust_dict = {
+    'Shooting':['Finishing','Curl','Set Piece Taking'],
+    'Passing':['Low Pass', 'Lofted Pass'],
+    'Dribbling':['Ball Control','Tight Possession','Dribbling'],
+    'Dexterity':['Offensive Awareness', 'Acceleration', 'Balance'],
+    'Lower Body Strength':['Speed','Kicking Power','Stamina'],
+    'Aerial Strength': ['Physical Contact', 'Heading', 'Jumping'],
+    'Defending':['Defensive Awareness', 'Defensive Engagement', 'Tackling', 'Aggression'],
+    'GK 1':['Jumping','GK Awareness'],
+    'GK 2':['GK Parrying','GK Reach'],
+    'GK 3':['GK Catching','GK Reflexes'],
+}
+
 def get_unactivated(pos):
     ls = []
     for key,value in activate_dict.items():
@@ -135,6 +148,53 @@ def main():
 
     with open('data/main_skill_stat_dict.pkl', 'rb') as file:
         main_skill_stat_dict = pickle.load(file)
+
+    kdf = pd.read_csv('data/konami_rating_solved.csv', index_col = 0)
+
+    def allocation(pos, points):
+        alloc = np.zeros(10)
+        while points>0:
+            ls = []
+            costls = []
+            for i in range(10):
+                statls = adjust_dict[list(adjust_dict.keys())[i]]
+                value = 0
+                for stat in statls:
+                    value+=kdf.loc[stat,pos]
+                cost = int((alloc[i])/4)+1
+                if(cost>points):
+                    cost = np.inf
+                ls.append(value/cost)
+                costls.append(cost)
+            choice = np.argmax(ls)
+            opti_cost = costls[choice]
+            alloc[choice]+=1
+            points -= opti_cost
+        return dict(zip(
+            adjust_dict.keys(), alloc.astype(int)))
+        
+    def alloc_diff(pos1, pos2, level):
+        points = (level-1) * 2
+        vec1 = allocation(pos1, points)
+        vec2 = allocation(pos2, points)
+        vec = {}
+        for key,value in vec2.items():
+            vec[key] = value-vec1[key]
+        return vec
+
+    def calc_overall_rating(edf, pos):
+        def clamp(e):
+            return np.clip(e-25, 0, np.inf)
+        edf['Rating'] = 0
+        for i in kdf[pos].index:
+            if(i=='Height'):
+                edf['Rating']+=kdf.loc[i,pos]*clamp(edf[i]-111)
+            elif(i=='Weak Foot Accuracy'):
+                edf['Rating']+=kdf.loc[i,pos]*clamp(59 * edf['f_Weak Foot Accuracy'] / 3 + 40);
+            else:
+                edf['Rating']+=kdf.loc[i,pos]*clamp(edf[i])
+        edf['Rating'] = (edf['Rating'] + 0.5).astype(int)
+        return edf['Rating']
 
     st.markdown("""
     <style>
@@ -206,6 +266,16 @@ def main():
             pos = pdf['max_position'].values[0].split(',')[0]
             posls = ast.literal_eval(pdf['Possible Positions'].values[0])
             pos = col2.selectbox("Pick Position for Analysis", posls, posls.index(pos))
+           
+            pos2 = col3.selectbox("Pick Position for Training", posls, posls.index(pdf['Position'].values[0]))
+
+            if pdf['Position'].values[0] != pos2:
+                adjustment_vector = alloc_diff(pdf['Position'].values[0], pos2, pdf['Maximum Level'].values[0])
+                for stat, value in adjustment_vector.items():
+                    for attr in adjust_dict[stat]:
+                        pdf.loc[0, attr]+=value
+                pdf.loc[0, 'or_'+pos2] = calc_overall_rating(pdf, pos2)[0]
+
             col1.header(str(pdf['or_'+pos].values[0])+' '+pdf['Player Name'].values[0])
 
             col1, col2, col3 = st.columns(3)
@@ -397,7 +467,8 @@ def main():
             st.subheader('Version Comparison')
                
             cdf = pd.concat([pdf,
-                            adf[(adf['Player Name'].values==pdf['Player Name'].values[0])&(adf['Player ID']!=pid)].sort_values('max_ovr_rating', ascending = False)
+                            adf[(adf['Player Name'].values==pdf['Player Name'].values[0])&(adf['Player ID']!=pid)
+                            &((adf['Maximum Level']>5)|(adf['Overall Rating']>=88))].sort_values('max_ovr_rating', ascending = False)
                             ])            
 
             def plot_comparison(stat):
