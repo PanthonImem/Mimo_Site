@@ -86,7 +86,6 @@ def main():
     adf = load_data()
     adf['Player ID'] = adf['Player ID'].astype(str)
     adf['Player Name_dcd'] = adf.apply(lambda row: unidecode(row['Player Name'].lower()), axis = 1)
-
     with open('data/kdtree_similar_player_search.pkl', 'rb') as file:
         simdict = pickle.load(file)
     with open('data/base_player_avg_stat.pkl', 'rb') as file:
@@ -165,6 +164,8 @@ def main():
                     pdf[col] = pdf[col] * weightdict[pos][col]
                 vec = pdf.loc[0, ability_cols]
                 dist, ind = simdict[pos].query(np.array(vec).reshape(1,len(ability_cols)), k=adf.shape[0]) 
+
+
                 tempdf = adf.loc[ind[0]]
                 tempdf['stat_dist'] = np.round(dist[0]/len(ability_cols),2)
                 tempdf = tempdf[tempdf['Possible Positions'].str.contains(pos)]
