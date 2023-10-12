@@ -536,6 +536,8 @@ def main():
             for ability in ability_cols:
                 if(pos!='GK' and 'GK' not in ability):
                     plot_comparison(ability)
+                elif(pos == 'GK' and 'GK' in ability):
+                    plot_comparison(ability)
             plot_skill_added()
             plot_skill_loss()
             
