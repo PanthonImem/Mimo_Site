@@ -30,7 +30,8 @@ def main():
      This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please access the site on a desktop device.")
     
     st.subheader('Recent Changelog:')
-    st.write('08/12/23 - Monday data update')
+    st.write('16/10/23 - Monday data update')
+    st.write('12/10/23 - Thursday data update')
     st.write('08/10/23 - Monday data update')
     st.write('06/10/23 - Add training as position to Analysis page')
     st.write('05/10/23 - Thursday data update')
