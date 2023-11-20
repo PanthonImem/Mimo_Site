@@ -30,6 +30,8 @@ def main():
      This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please access the site on a desktop device.")
     
     st.subheader('Recent Changelog:')
+    st.write('20/11/23 - Monday data update')
+    st.write('17/11/23 - Thursday data update')
     st.write('09/11/23 - Thursday data update + upgrade data processing pipeline')
     st.write('05/11/23 - Fix website crashes when searching for players -- Thanks for reporting the bug!')
     st.write('02/11/23 - Thursday data update')
@@ -39,11 +41,6 @@ def main():
     st.write('16/10/23 - Monday data update')
     st.write('12/10/23 - Thursday data update')
     st.write('08/10/23 - Monday data update')
-    st.write('06/10/23 - Add training as position to Analysis page')
-    st.write('05/10/23 - Thursday data update')
-    st.write('01/10/23 - Monday data update')
-    st.write('28/09/23 - Thursday data update & minor UI update')
-    st.write('27/09/23 - Add maximum possible trained rating in Player Analysis')
 
     st.subheader('Data Note:')
     st.write("This website relies on [PESDB](https://pesdb.net/efootball/) for data. I need PESDB to update first before I can update.")
