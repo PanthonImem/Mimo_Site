@@ -220,7 +220,7 @@ def main():
     pid = st.session_state.pid
     #Player Search Snippet
     col1, col2 = st.columns(2)
-    pack = col1.selectbox('Recent Packs', adf['pack'].unique()[-10:][::-1])
+    pack = col1.selectbox('Recent Packs', adf['pack'].unique()[::-1])
     if pack:
         with st.expander(':violet[{}]'.format(pack)):
             st.write(adf[adf.pack == pack][['Player ID','Overall Rating','Position','Player Name','max_ovr_rating','max_position','pack']]\
