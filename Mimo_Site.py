@@ -43,6 +43,7 @@ def main():
     st.write('08/10/23 - Monday data update')
 
     st.subheader('Data Note:')
+
     st.write("This website relies on [PESDB](https://pesdb.net/efootball/) for data. I need PESDB to update first before I can update.")
 
     st.write('I would like to hereby thank [PESDB](https://pesdb.net/efootball/) for the data behind this project. While not officially a data sponsor,\
