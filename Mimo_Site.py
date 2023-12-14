@@ -30,6 +30,7 @@ def main():
      This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please access the site on a desktop device.")
     
     st.subheader('Recent Changelog:')
+    st.write('15/12/23 - Thursday data update')
     st.write('30/11/23 - Thursday data update')
     st.write('20/11/23 - Monday data update')
     st.write('17/11/23 - Thursday data update')
