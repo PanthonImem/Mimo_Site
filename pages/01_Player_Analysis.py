@@ -288,7 +288,9 @@ def main():
             comp_base = col2.checkbox('Compare to Base', value = True)
             pstr = ""
             if comp_base:
-                bdf = adf[(adf['Player Name']==pdf['Player Name'].values[0])&(adf['pack']=='base')]
+                bdf = adf[(adf['Player Name']==pdf['Player Name'].values[0])&(adf['pack']=='base')
+                &(adf['Team Name']==pdf['Team Name'].values[0])].sort_values('Overall Rating', ascending = False)
+
                 if bdf.shape[0] == 0:
                     col2.text('Base Player Not Found')
                     comp_base = False
