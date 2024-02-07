@@ -299,6 +299,13 @@ def main():
                     pstr =  "(from {})".format(bdf['Playstyle'].values[0]) if comp_base and bdf['Playstyle'].values[0]!=pdf['Playstyle'].values[0] else ''
             else:
                 bdf = pdf.copy()
+            if(not np.isnan(pdf['MSPCI'].values[0].round(2)) and pos == pdf['Position'].values[0]):
+                if(pdf['MSPCI'].values[0].round(2) > 0.5):
+                    col2.write("Mimo's Stats-Playstyle Compatibility Index: :green[{}]".format(pdf['MSPCI'].values[0].round(2)))
+                elif(pdf['MSPCI'].values[0].round(2) > 0):
+                    col2.write("Mimo's Stats-Playstyle Compatibility Index: :orange[{}]".format(pdf['MSPCI'].values[0].round(2)))
+                else:
+                    col2.write("Mimo's Stats-Playstyle Compatibility Index: :red[{}]".format(pdf['MSPCI'].values[0].round(2)))
 
             col1.write("Pack: {}".format(pdf['pack'].values[0].lstrip()))
             

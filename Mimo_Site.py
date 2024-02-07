@@ -29,14 +29,6 @@ def main():
     st.write("This website is currently hosted (for free) on :blue[Streamlit Community Cloud].\
      This website has :red[limited] functionality on mobile. Some features maybe unavailable. For your experience please access the site on a desktop device.")
     
-    st.subheader('Recent Changelog:')
-    st.write('15/12/23 - Thursday data update')
-    st.write('30/11/23 - Thursday data update')
-    st.write('20/11/23 - Monday data update')
-    st.write('17/11/23 - Thursday data update')
-    st.write('09/11/23 - Thursday data update + upgrade data processing pipeline')
-    st.write('05/11/23 - Fix website crashes when searching for players -- Thanks for reporting the bug!')
-
     st.subheader('Data Note:')
 
     st.write("This website relies on [PESDB](https://pesdb.net/efootball/) for data. I need PESDB to update first before I can update.")
