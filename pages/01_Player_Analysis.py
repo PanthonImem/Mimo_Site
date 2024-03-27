@@ -46,7 +46,7 @@ sset = ['Acrobatic Clear',
  'Captaincy',
  'Chip Shot Control',
  'Chop Turn',
- 'Cut Behind &; Turn',
+ 'Cut Behind & Turn',
  'Dipping Shot',
  'Double Touch',
  'Fighting Spirit',
@@ -132,7 +132,7 @@ def get_unactivated(pos):
 
 @st.cache_data
 def load_data():
-	return pd.read_csv('data/mimo_dataset.csv')
+	return pd.read_csv('data/new_mimo_dataset.csv')
 
 def main():
     st.set_page_config(layout="wide")
@@ -408,7 +408,7 @@ def main():
             display_skill(col2, 'Heel Trick')
             display_skill(col2, 'No Look Pass')
             display_skill(col2, 'Marseille Turn')
-            display_skill(col2, 'Cut Behind &; Turn')
+            display_skill(col2, 'Cut Behind & Turn')
             display_skill(col2, 'Chop Turn')
             display_skill(col2, 'Scissors Feint')
             display_skill(col2, 'Scotch Move')

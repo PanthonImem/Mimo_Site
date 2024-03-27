@@ -76,7 +76,7 @@ def get_unactivated(pos):
 
 @st.cache_data
 def load_data():
-	return pd.read_csv('data/mimo_dataset.csv')
+	return pd.read_csv('data/new_mimo_dataset.csv')
 
 def main():
     st.set_page_config(layout="wide")
@@ -171,7 +171,7 @@ def main():
                 tempdf = tempdf[tempdf['Possible Positions'].str.contains(pos)]
                 tempdf = tempdf.sort_values('max_ovr_rating', ascending = False)
                 if show_base_only:
-                    tempdf = tempdf[tempdf.pack == 'base']
+                    tempdf = tempdf[tempdf.pack == 'Base']
 
                 tempdf = tempdf#.drop_duplicates(['Player Name','Playstyle']).reset_index(drop = True)
                 tempdf = tempdf.sort_values('stat_dist')

@@ -71,7 +71,7 @@ def find_top_skills(pdf):
 
 @st.cache_data
 def load_data():
-	return pd.read_csv('data/mimo_dataset.csv')
+	return pd.read_csv('data/new_mimo_dataset.csv')
 
 def main():
     st.set_page_config(layout="wide")

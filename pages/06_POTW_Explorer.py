@@ -45,7 +45,7 @@ def get_unactivated(pos):
 
 @st.cache_data
 def load_data():
-	return pd.read_csv('data/mimo_dataset.csv')
+	return pd.read_csv('data/new_mimo_dataset.csv')
 
 def main():
     st.set_page_config(layout="wide")
@@ -64,7 +64,7 @@ def main():
     potw_packs = [i for i in adf['pack'].unique() if 'POTW' in i]
 
     pdf = adf[adf.pack.isin(potw_packs)]
-    bdf = adf[adf.pack=='base'][['Player Name','max_ovr_rating']].rename({'max_ovr_rating':'base_rating'}, axis = 1).drop_duplicates('Player Name')
+    bdf = adf[adf.pack=='Base'][['Player Name','max_ovr_rating']].rename({'max_ovr_rating':'base_rating'}, axis = 1).drop_duplicates('Player Name')
 
     latest_pack = potw_packs[-1]
 
@@ -74,8 +74,8 @@ def main():
     pdf['mimo_upgrade_value_index'] = 0.7+0.3*np.clip(pdf['max_ovr_rating']-pdf['base_rating'],0,3)/3
 
     pdf['mimo_form_value_index'] = 1
-    pdf.loc[pdf.Form == 'Standard', 'mimo_form_value_index'] = 0.9
-    pdf.loc[pdf.Form == 'Inconsistent', 'mimo_form_value_index'] = 0.75
+    pdf.loc[pdf.Form == 'Standard', 'mimo_form_value_index'] = 0.95
+    pdf.loc[pdf.Form == 'Inconsistent', 'mimo_form_value_index'] = 9
     pdf['mimo_value_index'] = np.clip(pdf['mimo_upgrade_value_index']*pdf['mimo_stat_value_index']\
     *pdf['mimo_form_value_index']+1*pdf['s_Super-sub'],0.5,np.inf).round(1)
 
