@@ -163,10 +163,7 @@ def main():
             st.write('Player {} not found.'.format(pid))
 
     st.divider()
-    st.write('Example Player ID:')
-    st.write(adf[adf['Player ID'].isin([str(i) for i in common_picks])][['Player ID', 'Overall Rating','Player Name','pack']].reset_index(drop = True))
 
-  
 
 if __name__ == "__main__":
     main()
