@@ -12,9 +12,6 @@ import sys
 sys.path.append("../code")
 from utility import hide_github
 
-
-common_picks = [88029649700314, 88029649706260, 88029649833402]
-
 sset = ['Acrobatic Clear',
  'Acrobatic Finishing',
  'Aerial Superiority',
