@@ -74,8 +74,8 @@ def main():
     pdf['mimo_upgrade_value_index'] = 0.7+0.3*np.clip(pdf['max_ovr_rating']-pdf['base_rating'],0,3)/3
 
     pdf['mimo_form_value_index'] = 1
-    pdf.loc[pdf.Form == 'Standard', 'mimo_form_value_index'] = 0.95
-    pdf.loc[pdf.Form == 'Inconsistent', 'mimo_form_value_index'] = 9
+    pdf.loc[pdf.Form == 'Standard', 'mimo_form_value_index'] = 0.9
+    pdf.loc[pdf.Form == 'Inconsistent', 'mimo_form_value_index'] = 0.8
     pdf['mimo_value_index'] = np.clip(pdf['mimo_upgrade_value_index']*pdf['mimo_stat_value_index']\
     *pdf['mimo_form_value_index']+1*pdf['s_Super-sub'],0.5,np.inf).round(1)
 
