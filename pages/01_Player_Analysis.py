@@ -149,6 +149,9 @@ def main():
     with open('data/main_skill_stat_dict.pkl', 'rb') as file:
         main_skill_stat_dict = pickle.load(file)
 
+    
+    trainer_df = pd.read_csv('data/trainer.csv')
+
     kdf = pd.read_csv('data/konami_rating_solved.csv', index_col = 0)
 
     def allocation(pos, points):
@@ -181,6 +184,7 @@ def main():
         for key,value in vec2.items():
             vec[key] = value-vec1[key]
         return vec
+
 
     def calc_overall_rating(edf, pos):
         def clamp(e):
@@ -274,7 +278,8 @@ def main():
                 for stat, value in adjustment_vector.items():
                     for attr in adjust_dict[stat]:
                         pdf.loc[0, attr]+=value
-                pdf.loc[0, 'or_'+pos2] = calc_overall_rating(pdf, pos2)[0]
+                pdf.loc[0, 'or_'+pos2] = np.min([pdf.loc[0, 'orr_'+pos2], calc_overall_rating(pdf, pos2)[0]])
+    
 
             col1.header(str(pdf['or_'+pos].values[0])+' '+pdf['Player Name'].values[0])
 
