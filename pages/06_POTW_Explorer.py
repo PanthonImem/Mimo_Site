@@ -74,15 +74,17 @@ def main():
     pdf['mimo_upgrade_value_index'] = 0.7+0.3*np.clip(pdf['max_ovr_rating']-pdf['base_rating'],0,3)/3
 
     pdf['mimo_form_value_index'] = 1
-    pdf.loc[pdf.Form == 'Standard', 'mimo_form_value_index'] = 0.9
+    pdf.loc[pdf.Form == 'Standard', 'mimo_form_value_index'] = 1
     pdf.loc[pdf.Form == 'Inconsistent', 'mimo_form_value_index'] = 0.8
     pdf['mimo_value_index'] = np.clip(pdf['mimo_upgrade_value_index']*pdf['mimo_stat_value_index']\
     *pdf['mimo_form_value_index']+1*pdf['s_Super-sub'],0.5,np.inf).round(1)
 
+    pdf['mimo_value_index'] = pdf['mimo_value_index'].fillna(0)
+
     gdf = pdf.groupby('pack').agg({'mimo_value_index':'mean'}).sort_values('mimo_value_index',ascending = False).round(2).reset_index()
     
     mmean = gdf['mimo_value_index'].mean().round(2)
-    mstd = gdf['mimo_value_index'].std().round(2)
+    mstd = np.round(gdf['mimo_value_index'].std(),2)
     
     pack = st.selectbox('POTW Pack Filter', potw_packs[::-1], index = 0)
     df = pdf[pdf.pack == pack][['pack','Player Name','max_ovr_rating','max_position','Playstyle','Form','mimo_value_index']]\
